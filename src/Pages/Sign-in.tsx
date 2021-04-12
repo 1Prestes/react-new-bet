@@ -1,9 +1,11 @@
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { TitleMD, TitleXL } from '../Components/typography'
 import { Button } from '../Components/buttons'
 import Login from '../Components/Login'
 import Footer from '../Components/Footer'
+import { Route, Redirect } from 'react-router-dom'
 
 const AuthenticationContainer = styled.div`
   text-align: center;
@@ -18,7 +20,13 @@ const Container = styled.div`
   align-items: center;
 `
 
-const SignIn = (): JSX.Element => {
+const SignIn: React.FC = () => {
+  const [isAuth, setIsAuth] = useState(Boolean)
+
+  useEffect(() => {
+    setIsAuth(false)
+  }, [])
+
   return (
     <>
       <Container>
@@ -30,7 +38,8 @@ const SignIn = (): JSX.Element => {
           <TitleXL>Lottery</TitleXL>
         </AuthenticationContainer>
 
-        <Login />
+        {!isAuth && <Redirect to='/authentication/login' />}
+        {!isAuth && <Route path='/authentication/login' render={() => <Login />} />}
       </Container>
       <Footer />
     </>
