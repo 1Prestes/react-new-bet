@@ -36,7 +36,9 @@ const Login: React.FC = () => {
           </OutlineButton>
         </Form>
         <OutlineButton color='#707070' fontSize='2.1875em' margin='30px'>
-          Sign Up <IoMdArrowForward />
+          <Link to='/authentication/sign-up'>
+            Sign Up <IoMdArrowForward />
+          </Link>
         </OutlineButton>
       </IconContext.Provider>
     </AuthenticationFormContainer>

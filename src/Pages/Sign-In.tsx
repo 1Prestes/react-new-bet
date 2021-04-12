@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import { Route, Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 
+import Login from '../Components/Login'
+import SignUp from '../Components/Sign-Up'
+import ResetPassword from '../Components/ResetPassword'
 import { TitleMD, TitleXL } from '../Components/typography'
 import { Button } from '../Components/buttons'
-import Login from '../Components/Login'
 // import Footer from '../Components/Footer'
-import { Route, Redirect } from 'react-router-dom'
-import ResetPassword from '../Components/ResetPassword'
 
 const Container = styled.div`
   display: flex;
@@ -57,6 +58,7 @@ const SignIn: React.FC = () => {
           path='/authentication/recover-password'
           render={() => <ResetPassword />}
         />
+        <Route path='/authentication/sign-up' render={() => <SignUp />} />
       </Container>
       {/* <Footer /> */}
     </>
