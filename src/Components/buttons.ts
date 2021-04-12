@@ -7,6 +7,7 @@ interface ButtonProps {
   padding?: string
   margin?: string
   backgroundColor?: string
+  border?: string
 }
 
 export const Button = styled.button<ButtonProps>`
@@ -25,10 +26,12 @@ export const OutlineButton = styled.button<ButtonProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent;
+  background-color: ${props => props.backgroundColor ?? 'transparent'};
   width: ${props => props.width ?? 'max-content'};
   margin: ${props => props.margin ?? 0};
   padding: ${props => props.padding ?? '10px 20px'};
+  border-radius:100px;
+  border: ${props => props.border ?? 'none'};
   font-style: italic;
   font-weight: bold;
   font-size: ${(props) => props.fontSize ?? props.theme.typography.sm};
