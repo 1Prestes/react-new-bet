@@ -6,6 +6,7 @@ import { Button } from '../Components/buttons'
 import Login from '../Components/Login'
 import Footer from '../Components/Footer'
 import { Route, Redirect } from 'react-router-dom'
+import ResetPassword from '../Components/ResetPassword'
 
 const AuthenticationContainer = styled.div`
   text-align: center;
@@ -39,7 +40,13 @@ const SignIn: React.FC = () => {
         </AuthenticationContainer>
 
         {!isAuth && <Redirect to='/authentication/login' />}
-        {!isAuth && <Route path='/authentication/login' render={() => <Login />} />}
+        {!isAuth && (
+          <Route path='/authentication/login' render={() => <Login />} />
+        )}
+        <Route
+          path='/authentication/recover-password'
+          render={() => <ResetPassword />}
+        />
       </Container>
       <Footer />
     </>

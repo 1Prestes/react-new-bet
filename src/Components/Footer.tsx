@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const HtmlFooter = styled.footer`
+  position: fixed;
   border-top: 2px solid #ebebeb;
   left: 0;
   bottom: 0;

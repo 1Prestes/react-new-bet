@@ -6,6 +6,15 @@ interface IChildren {
   children: React.ReactNode
 }
 
+export const AuthenticationFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto 20px;
+  text-align: center;
+`
+
 const HtmlForm = styled.form`
   display: flex;
   flex-direction: column;

@@ -31,4 +31,11 @@ export const OutlineButton = styled.button<ButtonProps>`
   font-weight: bold;
   color: ${props => props.color};
   font-size: ${(props) => props.fontSize ?? props.theme.typography.sm};
+
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: ${props => props.color};
+  }
 `
