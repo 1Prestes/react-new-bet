@@ -13,6 +13,10 @@ export const AuthenticationFormContainer = styled.div`
   align-items: center;
   margin: auto 20px;
   text-align: center;
+
+  @media (max-width: 699px) {
+    margin: 80px auto;
+  }
 `
 
 const HtmlForm = styled.form`
@@ -24,6 +28,10 @@ const HtmlForm = styled.form`
   box-shadow: 0px 3px 25px #00000014;
   border: 1px solid #ddd;
   border-radius: 14px;
+
+  @media (max-width: 360px) {
+    width: 100%;
+  }
 `
 
 const Form: React.FC<IChildren> = ({ children }) => (

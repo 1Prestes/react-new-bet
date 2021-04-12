@@ -4,21 +4,26 @@ import styled from 'styled-components'
 import { TitleMD, TitleXL } from '../Components/typography'
 import { Button } from '../Components/buttons'
 import Login from '../Components/Login'
-import Footer from '../Components/Footer'
+// import Footer from '../Components/Footer'
 import { Route, Redirect } from 'react-router-dom'
 import ResetPassword from '../Components/ResetPassword'
-
-const AuthenticationContainer = styled.div`
-  text-align: center;
-  width: min-content;
-  margin: auto 20px;
-`
 
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+  height: 100vh;
+
+  @media (max-width: 699px) {
+    margin-top: 100px;
+  }
+`
+
+const AuthenticationContainer = styled.div`
+  text-align: center;
+  width: min-content;
+  margin: auto 20px;
 `
 
 const SignIn: React.FC = () => {
@@ -33,7 +38,12 @@ const SignIn: React.FC = () => {
       <Container>
         <AuthenticationContainer>
           <TitleMD>The Greatest App</TitleMD>
-          <Button backgroundColor='#B5C401' width='144px' height='39px'>
+          <Button
+            backgroundColor='#B5C401'
+            width='144px'
+            height='39px'
+            margin='30px auto'
+          >
             for
           </Button>
           <TitleXL>Lottery</TitleXL>
@@ -48,7 +58,7 @@ const SignIn: React.FC = () => {
           render={() => <ResetPassword />}
         />
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }

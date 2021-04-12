@@ -22,7 +22,7 @@ const Login: React.FC = () => {
   return (
     <AuthenticationFormContainer>
       <IconContext.Provider value={{ style: { paddingLeft: '19px' } }}>
-        <TitleSM>Authentication</TitleSM>
+        <TitleSM margin='26px auto'>Authentication</TitleSM>
         <Form>
           <Input type='text' placeholder='Email' />
           <Input type='password' placeholder='Password' />

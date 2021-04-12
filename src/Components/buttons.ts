@@ -12,9 +12,10 @@ interface ButtonProps {
 export const Button = styled.button<ButtonProps>`
   background-color: ${props => props.backgroundColor ?? 'blue'};
   border-radius: 100px;
-  width: ${props => props.width};
+  width: ${props => props.width ?? 'max-content'};
   height: ${props => props.height};
   color: ${props => props.color ?? '#fff'};
+  margin: ${props => props.margin ?? 'auto'};
   font-size: 22px;
   font-weight: bold;
   font-style: italic;
@@ -25,12 +26,13 @@ export const OutlineButton = styled.button<ButtonProps>`
   justify-content: center;
   align-items: center;
   background: transparent;
+  width: ${props => props.width ?? 'max-content'};
   margin: ${props => props.margin ?? 0};
   padding: ${props => props.padding ?? '10px 20px'};
   font-style: italic;
   font-weight: bold;
-  color: ${props => props.color};
   font-size: ${(props) => props.fontSize ?? props.theme.typography.sm};
+  color: ${props => props.color};
 
   a {
     display: flex;

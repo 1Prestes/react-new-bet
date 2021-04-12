@@ -12,7 +12,7 @@ const ResetPassword: React.FC = () => {
   return (
     <AuthenticationFormContainer>
       <IconContext.Provider value={{ style: { padding: '0 19px' } }}>
-        <TitleSM>Reset password</TitleSM>
+        <TitleSM margin="26px auto">Reset password</TitleSM>
         <Form>
           <Input type='text' placeholder='Email' />
           <OutlineButton color='#b5C401' fontSize='2.1875em' margin='17px auto'>
