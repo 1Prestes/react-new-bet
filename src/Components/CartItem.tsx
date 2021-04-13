@@ -13,7 +13,7 @@ const HtmlCartItem = styled.div`
 
 const CartItemInfo = styled.div`
   margin-left: 10px;
-  padding: 10px 12px;
+  padding: 5px 12px;
   max-width: 210px;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -27,10 +27,10 @@ const CartItem: React.FC = () => {
         <IoTrashOutline />
       </OutlineButton>
       <CartItemInfo>
-        <Paragraph fontSize='0.9375em' color='#868686'>
+        <Paragraph margin='5px auto' fontSize='0.9375em' color='#868686'>
           02, 03, 07, 38, 47, 60
         </Paragraph>
-        <Paragraph fontSize='0.9375em' fontStyle='normal'>
+        <Paragraph margin='5px auto' fontSize='0.9375em' fontStyle='normal'>
           <Span color='rgb(1, 172, 102)'>Mega-Sena</Span>
           <Span fontWeight='lighter'> R$ 4,50</Span>
         </Paragraph>
