@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { IconContext } from 'react-icons'
+import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 
 import Form, { AuthenticationFormContainer } from './Form'
 import Input from './Input'
 import { TitleSM } from './typography'
 import { OutlineButton } from './buttons'
-import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 
 const ResetPassword: React.FC = () => {
   return (
