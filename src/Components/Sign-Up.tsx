@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 
+// import { useAppSelector, useAppDispatch } from '../store/hooks'
 import Form, { AuthenticationFormContainer } from './Form'
 import Input from './Input'
 import { TitleSM } from './typography'
@@ -9,6 +10,9 @@ import { OutlineButton } from './buttons'
 import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 
 const SignUp: React.FC = () => {
+  // const user = useAppSelector(state => state.registerUser)
+  // const dispatch = useAppDispatch()
+
   return (
     <AuthenticationFormContainer>
       <IconContext.Provider value={{ style: { padding: '0 19px' } }}>

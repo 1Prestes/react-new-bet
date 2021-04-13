@@ -7,7 +7,6 @@ import SignUp from '../Components/Sign-Up'
 import ResetPassword from '../Components/ResetPassword'
 import { TitleMD, TitleXL } from '../Components/typography'
 import { Button } from '../Components/buttons'
-// import Footer from '../Components/Footer'
 
 const Container = styled.div`
   display: flex;
