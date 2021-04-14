@@ -1,15 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import type { RootState } from './store'
-import createNewUser from '../Services/create-user'
 import createSession from '../Services/create-session'
+import { createUser } from '../Services/server'
+
+const initialState = {
+  user: {},
+  token: null,
+  error: ''
+}
 
 const usersSlice = createSlice({
   name: 'register',
-  initialState: [],
+  initialState,
   reducers: {
     REGISTER_USER (state, action) {
-      return state.concat(createNewUser(action.payload))
+      const user = createUser(action.payload)
+
+      if (user === 'E-mail exists') {
+        return { ...state, user: {}, error: user }
+      }
+      return { ...state, user, error: '' }
     },
     AUTH_USER (state, action) {
       createSession(action.payload)

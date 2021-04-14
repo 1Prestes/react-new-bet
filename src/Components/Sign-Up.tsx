@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
     password: yup
       .string()
       .min(6)
-      .required('Please provide a valid password')
+      .required()
   })
 
   const handleClick = async (
