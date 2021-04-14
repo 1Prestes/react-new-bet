@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken'
 
-function GenerateToken (email: string): string {
-  if (!email) return 'Un'
-  const token = jwt.sign({ email }, 'REACT_APP_SECRET_JWT', {
+const GenerateToken = (login: object): string => {
+  const token = jwt.sign({ login }, 'REACT_APP_SECRET_JWT', {
     expiresIn: '1h'
   })
   return token

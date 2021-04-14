@@ -9,12 +9,12 @@ import Input from './Input'
 import { TitleSM } from './typography'
 import { OutlineButton } from './buttons'
 import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
-import { REGISTER_USER } from '../store/registerReducer'
+import { REGISTER_USER } from '../store/userReducer'
 
 const SignUp: React.FC = () => {
   const [newUser, setNewUser] = useState({ name: '', email: '', password: '' })
   const dispatch = useAppDispatch()
-  const users = useAppSelector(state => state.registerUser)
+  const users = useAppSelector(state => state.users)
 
   useEffect(() => {
     console.log(users)
@@ -42,7 +42,9 @@ const SignUp: React.FC = () => {
 
     await schema
       .validate(newUser)
-      .then(res => dispatch(REGISTER_USER(res)))
+      .then(res => {
+        dispatch(REGISTER_USER(res))
+      })
       .catch(err => err.errors)
   }
 
@@ -65,14 +67,14 @@ const SignUp: React.FC = () => {
             value={newUser.name}
           />
           <Input
-            changed={(event) => handleChange(event)}
+            changed={event => handleChange(event)}
             type='email'
             placeholder='Email'
             name='email'
             value={newUser.email}
           />
           <Input
-            changed={(event) => handleChange(event)}
+            changed={event => handleChange(event)}
             type='password'
             placeholder='Password'
             name='password'
