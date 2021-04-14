@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import type { RootState } from './store'
-import createSession from '../Services/create-session'
-import { createUser } from '../Services/server'
+import { auth, createUser } from '../Services/FakeServer/server'
 
 const initialState = {
   user: {},
@@ -23,8 +22,12 @@ const usersSlice = createSlice({
       return { ...state, user, error: '' }
     },
     AUTH_USER (state, action) {
-      createSession(action.payload)
-      return state
+      const newAuth = auth(action.payload.login)
+
+      if (newAuth === 'Incorrect data') {
+        return { ...state, error: newAuth, token: null }
+      }
+      return { ...state, user: newAuth.user, token: newAuth.token, error: '' }
     }
   }
 })

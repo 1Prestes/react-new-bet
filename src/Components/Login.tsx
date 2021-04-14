@@ -28,7 +28,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     console.log(users)
-  }, [])
+  }, [users])
 
   const schema = yup.object().shape({
     password: yup
@@ -55,7 +55,6 @@ const Login: React.FC = () => {
     await schema
       .validate(user)
       .then(res => {
-        console.log(users)
         dispatch(AUTH_USER({ login: res, users }))
       })
       .catch(err => console.log(err.errors))
