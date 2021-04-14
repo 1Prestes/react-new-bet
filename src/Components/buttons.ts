@@ -26,6 +26,7 @@ export const Button = styled.button<ButtonProps>`
   font-size:  ${(props) => props.fontSize ?? '22px'};
   font-style: ${props => props.fontStyle ?? 'italic'};
   font-weight: ${props => props.fontWeight ?? 'bold'};
+  cursor: pointer;
   color: ${props => props.color ?? '#fff'};
 `
 
@@ -42,12 +43,14 @@ export const OutlineButton = styled.button<ButtonProps>`
   font-style: ${props => props.fontStyle ?? 'italic'};
   font-weight: ${props => props.fontWeight ?? 'bold'};
   font-size: ${(props) => props.fontSize ?? props.theme.typography.sm};
+  cursor: pointer;
   color: ${props => props.color};
 
   a {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     color: ${props => props.color};
   }
 `

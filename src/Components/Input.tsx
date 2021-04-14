@@ -4,6 +4,9 @@ import styled from 'styled-components'
 interface IInput {
   type: string
   placeholder: string
+  name?: string
+  value?: string
+  changed?: (e: React.FormEvent<HTMLInputElement>) => void
 }
 
 const HtmlInput = styled.input`
@@ -20,8 +23,22 @@ const HtmlInput = styled.input`
   }
 `
 
-const Input = ({ type, placeholder }: IInput): React.ReactElement => {
-  return <HtmlInput type={type} placeholder={placeholder} />
+const Input = ({
+  type,
+  placeholder,
+  name,
+  value,
+  changed
+}: IInput): React.ReactElement => {
+  return (
+    <HtmlInput
+      onChange={changed}
+      type={type}
+      placeholder={placeholder}
+      name={name}
+      value={value}
+    />
+  )
 }
 
 export default Input
