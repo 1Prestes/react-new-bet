@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoCartOutline } from 'react-icons/io5'
 
+import { useAppSelector, useAppDispatch } from '../store/hooks'
+import { ADD_NUMBER_OF_BET, LOAD_GAMES, SET_CURRENT_GAME } from '../store/gamesReducer'
 import Navbar from './Navbar'
 import { OutlineButton, Button } from './buttons'
 import { Span, SubTitle, TitleXS, Paragraph } from './typography'
 import Cart from './Cart'
+import GameNumbers from './GameNumbers'
 
 const BetContainer = styled.main`
   display: flex;
@@ -38,21 +41,6 @@ const ChooseNumber = styled.div`
   margin: 30px 0 40px 0;
 `
 
-const GameNumber = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #adc0c4;
-  margin: 20px 12px 20px 0;
-  width: 65px;
-  height: 65px;
-  border-radius: 100px;
-  font-size: 1.25em;
-  font-weight: 700;
-  cursor: pointer;
-  color: #fff;
-`
-
 const Actions = styled.div`
   display: flex;
   justify-content: space-between;
@@ -65,6 +53,54 @@ const ActionsContainer = styled.div`
 `
 
 const NewBet: React.FC = () => {
+  const [gameNumbers, setGameNumbers] = useState<number[]>([])
+  const games = useAppSelector(state => state.games.games)
+  const currentGame = useAppSelector(state => state.games.currentGame)
+  const bet = useAppSelector(state => state.games.bet)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    async function getData (): Promise<any> {
+      await fetch('http://localhost:8080/types', {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        }
+      })
+        .then(async response => {
+          return await response.json()
+        })
+        .then(games => {
+          return dispatch(LOAD_GAMES(games))
+        })
+    }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    getData()
+  }, [])
+
+  useEffect(() => {
+    dispatch(SET_CURRENT_GAME(games[0]))
+  }, [games])
+
+  useEffect(() => {
+    setGameNumbers([])
+    for (let i = 1; i <= currentGame.range; i++) {
+      setGameNumbers(prevState => [...prevState, i])
+    }
+  }, [currentGame])
+
+  const toggleGame = (event: React.FormEvent<HTMLButtonElement>): void => {
+    const target = event.target as HTMLButtonElement
+    const test = games.filter(game => game.type === target.dataset.currentGame)
+    dispatch(SET_CURRENT_GAME(test[0]))
+  }
+
+  const chooseNumber = (event: React.FormEvent<HTMLDivElement>): void => {
+    const target = event.target as HTMLDivElement
+    dispatch(ADD_NUMBER_OF_BET(target.dataset.number))
+    console.log(bet)
+  }
+
   return (
     <>
       <Navbar />
@@ -72,37 +108,39 @@ const NewBet: React.FC = () => {
       <BetContainer>
         <BetGuide>
           <TitleXS>
-            NEW BET <Span fontWeight='lighter'>FOR MEGA-SENA</Span>
+            NEW BET{' '}
+            <Span textTransform='uppercase' fontWeight='lighter'>
+              FOR {currentGame?.type}
+            </Span>
           </TitleXS>
 
           <GameInfo>
             <SubTitle fontSize='1.0625em'>Choose a game</SubTitle>
             <GamesContainer>
-              <OutlineButton
-                fontSize='0.875em'
-                color='#7f3992'
-                border='2px solid #7f3992'
-                margin='20px 25px auto 0'
-              >
-                Lotofácil
-              </OutlineButton>
-              <OutlineButton
-                fontSize='0.875em'
-                color='#fff'
-                backgroundColor='#01ac66'
-                border='2px solid #01ac66'
-                margin='20px 25px auto 0'
-              >
-                Mega-Sena
-              </OutlineButton>
-              <OutlineButton
-                fontSize='0.875em'
-                color='#f79c31'
-                border='2px solid #f79c31'
-                margin='20px 25px auto 0'
-              >
-                Lotomania
-              </OutlineButton>
+              {games?.map(game => {
+                let { color, type } = game
+                let backgroundColor = 'transparent'
+                const border = color
+                if (game.type === currentGame.type) {
+                  backgroundColor = color
+                  color = '#fff'
+                }
+
+                return (
+                  <OutlineButton
+                    key={game.type}
+                    onClick={toggleGame}
+                    data-current-game={game.type}
+                    fontSize='0.875em'
+                    color={color}
+                    backgroundColor={backgroundColor}
+                    border={`2px solid ${border}`}
+                    margin='20px 25px auto 0'
+                  >
+                    {type}
+                  </OutlineButton>
+                )
+              })}
             </GamesContainer>
           </GameInfo>
 
@@ -111,49 +149,12 @@ const NewBet: React.FC = () => {
               Fill your bet
             </SubTitle>
             <Paragraph fontSize='1.0625em' fontWeight='lighter'>
-              Fill your bet Mark as many numbers as you want up to a maximum of
-              50. Win by hitting 15, 16, 17, 18, 19, 20 or none of the 20
-              numbers drawn.
+              {currentGame?.description}
             </Paragraph>
           </GameInfo>
 
           <ChooseNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
-            <GameNumber>01</GameNumber>
+            {currentGame && gameNumbers.map(number => <GameNumbers key={number} number={number} clicked={chooseNumber}/>)}
           </ChooseNumber>
 
           <Actions>

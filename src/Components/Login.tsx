@@ -48,7 +48,6 @@ const Login: React.FC = () => {
   const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
     const target = event.target as HTMLInputElement
     setUser({ ...user, [target.name]: target.value })
-    console.log(target.name, target.value)
   }
 
   const handleClick = async (
