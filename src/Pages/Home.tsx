@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
@@ -89,9 +90,11 @@ const Home: React.FC = () => {
           </FilterContainer>
 
           <IconContext.Provider value={{ style: { marginLeft: '10px' } }}>
-            <OutlineButton fontSize='1.5em' color='#B5C401'>
-              New Bet <IoMdArrowForward />
-            </OutlineButton>
+            <Link to='/new-bet'>
+              <OutlineButton fontSize='1.5em' color='#B5C401'>
+                New Bet <IoMdArrowForward />
+              </OutlineButton>
+            </Link>
           </IconContext.Provider>
         </Actions>
 

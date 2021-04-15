@@ -11,12 +11,8 @@ const Routes: React.FC = () => {
     <Router>
       <Switch>
         <Route path='/authentication' component={SignIn} />
-        <PrivateRoute>
-          <Home />
-        </PrivateRoute>
-        <PrivateRoute>
-          <NewBet />
-        </PrivateRoute>
+        <PrivateRoute path='/new-bet' Component={NewBet} />
+        <PrivateRoute path='/home' Component={Home} />
         <Route exact path='/' component={Home} />
       </Switch>
     </Router>

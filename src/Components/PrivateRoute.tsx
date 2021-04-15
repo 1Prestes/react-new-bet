@@ -1,18 +1,33 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Redirect, RouteComponentProps } from 'react-router-dom'
 import { useAppSelector } from '../store/hooks'
 
-const PrivateRoute: React.FC = ({ children, ...rest }) => {
+interface Props {
+  Component: React.FC<RouteComponentProps>
+  path: string
+  exact?: boolean
+}
+
+const PrivateRoute = ({
+  Component,
+  path,
+  exact = false,
+  ...rest
+}: Props): JSX.Element => {
   const auth = useAppSelector(state => state.user.token)
 
   return (
     <Route
+      exact={exact}
+      path={path}
       {...rest}
-      render={() =>
-        auth
-          ? children
-          : <Redirect to={{ pathname: '/authentication/login' }} />
-      }
+        render={(props: RouteComponentProps) =>
+          auth
+            ? <Component {...props}/>
+            : <Redirect to={{
+              pathname: '/authentication/login'
+            }} />
+        }
     />
   )
 }

@@ -11,7 +11,14 @@ interface User extends Payload {
   token?: string
 }
 
-const db: User[] = []
+const db: User[] = [
+  {
+    email: 'dijango_ilha@hotmail.com',
+    id: 'MTYxODQ0Njg5NTgxNw==',
+    name: 'Dijango Alves Rodolfo',
+    password: 'MTIzNDU2'
+  }
+]
 
 export function findUser (email: string): User | undefined {
   return db.find(user => {
@@ -33,6 +40,7 @@ export function createUser (payload: Payload): any {
 export function auth (login: User): any {
   const user = findUser(login.email)
   if (!user) return 'Incorrect data'
+
   const { id, name, email } = user
 
   if (btoa(login.password) === user.password) {
