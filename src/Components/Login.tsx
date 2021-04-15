@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 import * as yup from 'yup'
@@ -23,12 +23,16 @@ const ForgetPasswordParagraph = styled.p`
 
 const Login: React.FC = () => {
   const [user, setUser] = useState({ email: '', password: '' })
-  const users = useAppSelector(state => state.users)
+  const currentUser = useAppSelector(state => state.user)
+  const history = useHistory()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    console.log(users)
-  }, [users])
+    console.log(currentUser)
+    if (currentUser.token) {
+      history.push('/')
+    }
+  }, [currentUser])
 
   const schema = yup.object().shape({
     password: yup
@@ -55,7 +59,7 @@ const Login: React.FC = () => {
     await schema
       .validate(user)
       .then(res => {
-        dispatch(AUTH_USER({ login: res, users }))
+        dispatch(AUTH_USER({ login: res }))
       })
       .catch(err => console.log(err.errors))
   }

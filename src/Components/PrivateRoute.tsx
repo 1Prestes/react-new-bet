@@ -1,13 +1,15 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
+import { useAppSelector } from '../store/hooks'
 
 const PrivateRoute: React.FC = ({ children, ...rest }) => {
-  const auth = { user: false }
+  const auth = useAppSelector(state => state.user.token)
+
   return (
     <Route
       {...rest}
       render={() =>
-        auth.user
+        auth
           ? children
           : <Redirect to={{ pathname: '/authentication/login' }} />
       }

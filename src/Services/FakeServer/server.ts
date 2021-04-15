@@ -8,6 +8,7 @@ interface Payload {
 
 interface User extends Payload {
   id: string
+  token?: string
 }
 
 const db: User[] = []
@@ -18,7 +19,7 @@ export function findUser (email: string): User | undefined {
   })
 }
 
-export function createUser (payload: Payload): User | string {
+export function createUser (payload: Payload): any {
   if (findUser(payload.email)) return 'E-mail exists'
 
   const { name, email, password } = payload
@@ -26,8 +27,7 @@ export function createUser (payload: Payload): User | string {
   const user: User = { id, name, email, password: btoa(password) }
 
   db.push(user)
-
-  return user
+  return auth({ id, name, email, password })
 }
 
 export function auth (login: User): any {

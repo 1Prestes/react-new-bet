@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 import * as yup from 'yup'
 
@@ -13,12 +13,16 @@ import { REGISTER_USER } from '../store/userReducer'
 
 const SignUp: React.FC = () => {
   const [newUser, setNewUser] = useState({ name: '', email: '', password: '' })
+  const currentUser = useAppSelector(state => state.user)
   const dispatch = useAppDispatch()
-  const users = useAppSelector(state => state.users)
+  const history = useHistory()
 
   useEffect(() => {
-    console.log(users)
-  }, [users])
+    console.log(currentUser)
+    if (currentUser.token) {
+      history.push('/')
+    }
+  }, [currentUser])
 
   const schema = yup.object().shape({
     name: yup
