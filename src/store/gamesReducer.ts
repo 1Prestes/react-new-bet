@@ -70,10 +70,13 @@ const gamesSlice = createSlice({
     },
     ADD_NUMBER_OF_BET (state, action) {
       return { ...state, bet: state.bet.concat(action.payload) }
+    },
+    REMOVE_NUMBER_OF_BET (state, action) {
+      return { ...state, bet: action.payload }
     }
   }
 })
 
-export const { LOAD_GAMES, SET_CURRENT_GAME, ADD_NUMBER_OF_BET } = gamesSlice.actions
+export const { LOAD_GAMES, SET_CURRENT_GAME, ADD_NUMBER_OF_BET, REMOVE_NUMBER_OF_BET } = gamesSlice.actions
 export const user = (state: RootState): RootState => state
 export default gamesSlice.reducer

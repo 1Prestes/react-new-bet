@@ -4,12 +4,19 @@ import { IconContext } from 'react-icons'
 import { IoCartOutline } from 'react-icons/io5'
 
 import { useAppSelector, useAppDispatch } from '../store/hooks'
-import { ADD_NUMBER_OF_BET, LOAD_GAMES, SET_CURRENT_GAME } from '../store/gamesReducer'
+import {
+  ADD_NUMBER_OF_BET,
+  LOAD_GAMES,
+  REMOVE_NUMBER_OF_BET,
+  SET_CURRENT_GAME
+} from '../store/gamesReducer'
 import Navbar from './Navbar'
 import { OutlineButton, Button } from './buttons'
 import { Span, SubTitle, TitleXS, Paragraph } from './typography'
 import Cart from './Cart'
 import GameNumbers from './GameNumbers'
+import { numberExists } from '../Services/numberExists'
+import { removeNumber } from '../Services/removeNumber'
 
 const BetContainer = styled.main`
   display: flex;
@@ -95,10 +102,19 @@ const NewBet: React.FC = () => {
     dispatch(SET_CURRENT_GAME(test[0]))
   }
 
+  const paintNumber = (element: HTMLDivElement, color: string): void => {
+    element.style.setProperty('background-color', color)
+  }
+
   const chooseNumber = (event: React.FormEvent<HTMLDivElement>): void => {
     const target = event.target as HTMLDivElement
-    dispatch(ADD_NUMBER_OF_BET(target.dataset.number))
-    console.log(bet)
+    paintNumber(target, 'green')
+    if (numberExists(bet, Number(target.dataset.number))) {
+      const arr = removeNumber(bet, Number(target.dataset.number))
+      dispatch(REMOVE_NUMBER_OF_BET(arr))
+      return paintNumber(target, '#adc0c4')
+    }
+    dispatch(ADD_NUMBER_OF_BET(Number(target.dataset.number)))
   }
 
   return (
@@ -152,9 +168,16 @@ const NewBet: React.FC = () => {
               {currentGame?.description}
             </Paragraph>
           </GameInfo>
-
+          {bet.join(', ')}
           <ChooseNumber>
-            {currentGame && gameNumbers.map(number => <GameNumbers key={number} number={number} clicked={chooseNumber}/>)}
+            {currentGame &&
+              gameNumbers.map(number => (
+                <GameNumbers
+                  key={number}
+                  number={number}
+                  clicked={chooseNumber}
+                />
+              ))}
           </ChooseNumber>
 
           <Actions>
