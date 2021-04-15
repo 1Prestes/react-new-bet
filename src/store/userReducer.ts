@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { RootState } from './store'
+// import type { RootState } from './store'
 import { auth, createUser } from '../Services/FakeServer/server'
 import { setCookie } from '../Services/storageCookie'
 
@@ -32,5 +32,5 @@ const usersSlice = createSlice({
 })
 
 export const { REGISTER_USER, AUTH_USER } = usersSlice.actions
-export const user = (state: RootState): RootState => state
+// export const user = (state: RootState): RootState => state
 export default usersSlice.reducer
