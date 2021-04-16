@@ -4,7 +4,16 @@ import { createSlice } from '@reduxjs/toolkit'
 import { auth, createUser } from '../Services/FakeServer/server'
 import { setCookie } from '../Services/storageCookie'
 
-const initialState = {
+interface User {
+  user: any
+}
+
+interface InitialState extends User {
+  token: string
+  error: string
+}
+
+const initialState: InitialState = {
   user: {},
   token: '',
   error: ''

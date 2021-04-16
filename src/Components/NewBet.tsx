@@ -4,7 +4,10 @@ import { IconContext } from 'react-icons'
 import { IoCartOutline } from 'react-icons/io5'
 
 import { useAppSelector, useAppDispatch } from '../store/hooks'
-import { LOAD_GAMES, SET_CURRENT_GAME } from '../store/gamesReducer'
+import {
+  LOAD_GAMES,
+  SET_CURRENT_GAME
+} from '../store/gamesReducer'
 import Navbar from './Navbar'
 import { OutlineButton, Button } from './buttons'
 import { Span, SubTitle, TitleXS, Paragraph } from './typography'
@@ -58,6 +61,8 @@ const ActionsContainer = styled.div`
 const NewBet: React.FC = () => {
   const [gameNumbers, setGameNumbers] = useState<number[]>([])
   const [betNumbers, setBetNumbers] = useState<number[]>([])
+  const [cartItems, setCartItems] = useState<Object[]>([])
+  const user = useAppSelector(state => state.user.user)
   const games = useAppSelector(state => state.games.games)
   const currentGame = useAppSelector(state => state.games.currentGame)
   const dispatch = useAppDispatch()
@@ -154,6 +159,34 @@ const NewBet: React.FC = () => {
     setBetNumbers([])
     clearNumbers(betNumbers)
   }
+
+  const addToCart = (): void => {
+    const bet = {
+      id: btoa(String(Date.now())),
+      userId: user.id,
+      bet: betNumbers,
+      kindOfGame: currentGame.type,
+      color: currentGame.color,
+      price: currentGame.price,
+      date: String(new Date())
+    }
+    setCartItems([...cartItems, bet])
+    console.log(cartItems)
+    clearGame()
+  }
+
+  // const addToCart = (): void => {
+  //   const bet = {
+  //     id: btoa(String(Date.now())),
+  //     userId: user.id,
+  //     bet: betNumbers,
+  //     kindOfGame: currentGame.type,
+  //     price: currentGame.price,
+  //     date: String(new Date())
+  //   }
+  //   dispatch(ADD_NUMBER_OF_BET(bet))
+  //   clearGame()
+  // }
 
   return (
     <>
@@ -255,6 +288,7 @@ const NewBet: React.FC = () => {
               }}
             >
               <Button
+                onClick={addToCart}
                 backgroundColor='#27c383'
                 padding='17px 43px'
                 borderRadius='10px'
@@ -269,7 +303,7 @@ const NewBet: React.FC = () => {
           </Actions>
         </BetGuide>
 
-        <Cart />
+        <Cart cartItems={cartItems}/>
       </BetContainer>
     </>
   )

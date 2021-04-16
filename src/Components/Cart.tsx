@@ -6,6 +6,18 @@ import { IoMdArrowForward } from 'react-icons/io'
 import { Span, TitleXS } from './typography'
 import { OutlineButton } from './buttons'
 import CartItem from './CartItem'
+import { floatToReal } from '../Services/floatToReal'
+
+// interface CartItems {
+//   [index: number]: {
+//     bet: number[]
+//     date: string
+//     id: string
+//     kindOfGame: string
+//     price: number
+//     userId: string
+//   }
+// }
 
 const HtmlCart = styled.div`
   border: 1px solid #e2e2e2;
@@ -31,7 +43,7 @@ const CartFooter = styled.div`
   height: 96px;
 `
 
-const Cart: React.FC = () => {
+const Cart = ({ cartItems }: any): JSX.Element => {
   return (
     <HtmlCart>
       <CartContainer>
@@ -48,13 +60,32 @@ const Cart: React.FC = () => {
               Seu carrinho está vazio!
             </Span>
           )}
-          <CartItem />
+          {!!cartItems.length &&
+            cartItems.map((item: any) => {
+              return (
+                <CartItem
+                  key={item.id}
+                  type={item.kindOfGame}
+                  price={item.price}
+                  bet={item.bet}
+                  color={item.color}
+                />
+              )
+            })}
+          {!cartItems.length && <Span>Your Cart has been Empty :'(</Span>}
         </CartBody>
 
         <TitleXS>
           CART{' '}
           <Span fontStyle='normal' fontWeight='lighter'>
-            TOTAL: R$ 7,00
+            TOTAL: R${' '}
+            {!!cartItems.length &&
+              floatToReal(
+                cartItems.reduce((accumulator: number, currentValue: any) => {
+                  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                  return accumulator + currentValue.price
+                }, 0)
+              )}
           </Span>
         </TitleXS>
       </CartContainer>
