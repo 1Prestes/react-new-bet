@@ -12,6 +12,7 @@ import Cart from './Cart'
 import GameNumbers from './GameNumbers'
 import { numberExists } from '../Services/numberExists'
 import { removeNumber } from '../Services/removeNumber'
+import { generateGameNumbers } from '../Services/generateGameNumbers'
 
 const BetContainer = styled.main`
   display: flex;
@@ -110,7 +111,7 @@ const NewBet: React.FC = () => {
   //   element.style.setProperty('background-color', color)
   // }
 
-  const clearNumbers = (arrNumbers: number []): void => {
+  const clearNumbers = (arrNumbers: number[]): void => {
     arrNumbers.map((number: number) => {
       const element = document.querySelector(
         `div[data-number="${number}"]`
@@ -139,6 +140,14 @@ const NewBet: React.FC = () => {
 
     if (betNumbers.length >= currentGame['max-number']) return
     setBetNumbers([...betNumbers, numberSelected])
+  }
+
+  const completeGame = (): void => {
+    const amount = currentGame['max-number'] - betNumbers.length
+    const range = currentGame.range
+    const completedNumbers = generateGameNumbers(amount, range, betNumbers)
+    setBetNumbers(completedNumbers)
+    paintNumbers(betNumbers)
   }
 
   return (
@@ -207,6 +216,7 @@ const NewBet: React.FC = () => {
           <Actions>
             <ActionsContainer>
               <OutlineButton
+                onClick={completeGame}
                 margin='5px 25px auto 0'
                 padding='17px 25px'
                 fontWeight='600'
