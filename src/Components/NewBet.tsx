@@ -4,12 +4,7 @@ import { IconContext } from 'react-icons'
 import { IoCartOutline } from 'react-icons/io5'
 
 import { useAppSelector, useAppDispatch } from '../store/hooks'
-import {
-  ADD_NUMBER_OF_BET,
-  LOAD_GAMES,
-  REMOVE_NUMBER_OF_BET,
-  SET_CURRENT_GAME
-} from '../store/gamesReducer'
+import { LOAD_GAMES, SET_CURRENT_GAME } from '../store/gamesReducer'
 import Navbar from './Navbar'
 import { OutlineButton, Button } from './buttons'
 import { Span, SubTitle, TitleXS, Paragraph } from './typography'
@@ -61,9 +56,9 @@ const ActionsContainer = styled.div`
 
 const NewBet: React.FC = () => {
   const [gameNumbers, setGameNumbers] = useState<number[]>([])
+  const [betNumbers, setBetNumbers] = useState<number[]>([])
   const games = useAppSelector(state => state.games.games)
   const currentGame = useAppSelector(state => state.games.currentGame)
-  const bet = useAppSelector(state => state.games.bet)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -98,8 +93,11 @@ const NewBet: React.FC = () => {
 
   const toggleGame = (event: React.FormEvent<HTMLButtonElement>): void => {
     const target = event.target as HTMLButtonElement
-    const test = games.filter(game => game.type === target.dataset.currentGame)
-    dispatch(SET_CURRENT_GAME(test[0]))
+    const currentGame = games.filter(
+      game => game.type === target.dataset.currentGame
+    )
+    setBetNumbers([])
+    dispatch(SET_CURRENT_GAME(currentGame[0]))
   }
 
   const paintNumber = (element: HTMLDivElement, color: string): void => {
@@ -108,13 +106,16 @@ const NewBet: React.FC = () => {
 
   const chooseNumber = (event: React.FormEvent<HTMLDivElement>): void => {
     const target = event.target as HTMLDivElement
-    paintNumber(target, 'green')
-    if (numberExists(bet, Number(target.dataset.number))) {
-      const arr = removeNumber(bet, Number(target.dataset.number))
-      dispatch(REMOVE_NUMBER_OF_BET(arr))
+    const numberSelected = Number(target.dataset.number)
+    if (numberExists(betNumbers, numberSelected)) {
+      const arr = removeNumber(betNumbers, numberSelected)
+      setBetNumbers(arr)
       return paintNumber(target, '#adc0c4')
     }
-    dispatch(ADD_NUMBER_OF_BET(Number(target.dataset.number)))
+
+    if (betNumbers.length === currentGame['max-number']) return
+    setBetNumbers([...betNumbers, numberSelected])
+    paintNumber(target, 'green')
   }
 
   return (
@@ -168,7 +169,7 @@ const NewBet: React.FC = () => {
               {currentGame?.description}
             </Paragraph>
           </GameInfo>
-          {bet.join(', ')}
+          {betNumbers.join(', ')}
           <ChooseNumber>
             {currentGame &&
               gameNumbers.map(number => (
