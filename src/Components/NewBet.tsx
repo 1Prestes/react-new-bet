@@ -91,17 +91,41 @@ const NewBet: React.FC = () => {
     }
   }, [currentGame])
 
+  useEffect(() => {
+    clearNumbers(betNumbers)
+    paintNumbers(betNumbers)
+  }, [betNumbers])
+
   const toggleGame = (event: React.FormEvent<HTMLButtonElement>): void => {
     const target = event.target as HTMLButtonElement
     const currentGame = games.filter(
       game => game.type === target.dataset.currentGame
     )
     setBetNumbers([])
+    clearNumbers(betNumbers)
     dispatch(SET_CURRENT_GAME(currentGame[0]))
   }
 
-  const paintNumber = (element: HTMLDivElement, color: string): void => {
-    element.style.setProperty('background-color', color)
+  // const paintNumber = (element: HTMLDivElement, color: string): void => {
+  //   element.style.setProperty('background-color', color)
+  // }
+
+  const clearNumbers = (arrNumbers: number []): void => {
+    arrNumbers.map((number: number) => {
+      const element = document.querySelector(
+        `div[data-number="${number}"]`
+      ) as HTMLElement
+      return element?.removeAttribute('data-number-selected')
+    })
+  }
+
+  const paintNumbers = (arrNumbers: number[]): void => {
+    arrNumbers.map((number: number) => {
+      const element = document.querySelector(
+        `div[data-number="${number}"]`
+      ) as HTMLElement
+      return element?.setAttribute('data-number-selected', 'selected')
+    })
   }
 
   const chooseNumber = (event: React.FormEvent<HTMLDivElement>): void => {
@@ -110,12 +134,11 @@ const NewBet: React.FC = () => {
     if (numberExists(betNumbers, numberSelected)) {
       const arr = removeNumber(betNumbers, numberSelected)
       setBetNumbers(arr)
-      return paintNumber(target, '#adc0c4')
+      return clearNumbers(betNumbers)
     }
 
-    if (betNumbers.length === currentGame['max-number']) return
+    if (betNumbers.length >= currentGame['max-number']) return
     setBetNumbers([...betNumbers, numberSelected])
-    paintNumber(target, 'green')
   }
 
   return (
@@ -169,7 +192,7 @@ const NewBet: React.FC = () => {
               {currentGame?.description}
             </Paragraph>
           </GameInfo>
-          {betNumbers.join(', ')}
+          {betNumbers.sort((a, b) => a - b).join(', ')}
           <ChooseNumber>
             {currentGame &&
               gameNumbers.map(number => (

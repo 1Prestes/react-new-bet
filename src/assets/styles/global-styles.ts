@@ -13,6 +13,9 @@ const GlobalStyles = createGlobalStyle`
     border: none;
     outline: none;
   }
+  div[data-number-selected="selected"] {
+    background-color: green;
+  }
 `
 
 export default GlobalStyles
