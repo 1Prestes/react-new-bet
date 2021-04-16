@@ -150,6 +150,11 @@ const NewBet: React.FC = () => {
     paintNumbers(betNumbers)
   }
 
+  const clearGame = (): void => {
+    setBetNumbers([])
+    clearNumbers(betNumbers)
+  }
+
   return (
     <>
       <Navbar />
@@ -228,6 +233,7 @@ const NewBet: React.FC = () => {
                 Complete Game
               </OutlineButton>
               <OutlineButton
+                onClick={clearGame}
                 margin='5px 25px auto 0'
                 padding='17px 25px'
                 fontWeight='600'
