@@ -28,6 +28,13 @@ export const Button = styled.button<ButtonProps>`
   font-weight: ${props => props.fontWeight ?? 'bold'};
   cursor: pointer;
   color: ${props => props.color ?? '#fff'};
+
+  &[disabled] {
+    cursor: not-allowed;
+    transition: 1s;
+    opacity: 0.6;
+  }
+
 `
 
 export const OutlineButton = styled.button<ButtonProps>`
@@ -45,6 +52,12 @@ export const OutlineButton = styled.button<ButtonProps>`
   font-size: ${(props) => props.fontSize ?? props.theme.typography.sm};
   cursor: pointer;
   color: ${props => props.color};
+
+  &[disabled] {
+    cursor: not-allowed;
+    transition: 1s;
+    opacity: 0.6;
+  }
 
   a {
     display: flex;

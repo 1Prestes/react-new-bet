@@ -5,12 +5,15 @@ import { IoTrashOutline } from 'react-icons/io5'
 import { OutlineButton } from './buttons'
 import { Paragraph, Span } from './typography'
 import { floatToReal } from '../Services/floatToReal'
+import { useAppDispatch } from '../store/hooks'
+import { REMOVE_BET_OF_CART } from '../store/gamesReducer'
 
 interface Item {
   type: string
   price: number
   bet: number[]
   color: string
+  id: string
 }
 
 interface CartInfo {
@@ -32,15 +35,29 @@ const CartItemInfo = styled.div<CartInfo>`
   border-left: 4px solid ${props => props.borderColor};
 `
 
-const CartItem = ({ type, price, bet, color }: Item): JSX.Element => {
+const CartItem = ({ type, price, bet, color, id }: Item): JSX.Element => {
+  const dispatch = useAppDispatch()
+  const handleClick = (id: string): void => {
+    console.log(id)
+    dispatch(REMOVE_BET_OF_CART(id))
+  }
+
   return (
     <HtmlCartItem>
-      <OutlineButton color='#888888' padding='0 7px 0 0'>
-        <IoTrashOutline />
+      <OutlineButton
+        onClick={() => handleClick(id)}
+        data-id={id}
+        color='#888888'
+        padding='0 7px 0 0'
+      >
+        <IoTrashOutline data-id={id} />
       </OutlineButton>
       <CartItemInfo borderColor={color}>
         <Paragraph margin='5px auto' fontSize='0.9375em' color='#868686'>
-          {bet.slice().sort((a, b) => a - b).join(', ')}
+          {bet
+            .slice()
+            .sort((a, b) => a - b)
+            .join(', ')}
         </Paragraph>
         <Paragraph margin='5px auto' fontSize='0.9375em' fontStyle='normal'>
           <Span color={color}>{type}</Span>

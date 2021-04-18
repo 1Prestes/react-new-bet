@@ -3,12 +3,9 @@ import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoCartOutline } from 'react-icons/io5'
 
+import { fetchGames } from '../Services/loadGames'
 import { useAppSelector, useAppDispatch } from '../store/hooks'
-import {
-  ADD_NUMBER_OF_BET,
-  LOAD_GAMES,
-  SET_CURRENT_GAME
-} from '../store/gamesReducer'
+import { ADD_BET_TO_CART, SET_CURRENT_GAME } from '../store/gamesReducer'
 import Navbar from './Navbar'
 import { OutlineButton, Button } from './buttons'
 import { Span, SubTitle, TitleXS, Paragraph } from './typography'
@@ -68,22 +65,12 @@ const NewBet: React.FC = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    async function getData (): Promise<any> {
-      await fetch('http://localhost:8080/types', {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        }
-      })
-        .then(async response => {
-          return await response.json()
-        })
-        .then(games => {
-          return dispatch(LOAD_GAMES(games))
-        })
-    }
+    // console.log(loadGames())
+    // ;(function anyNameFunction () {
+    //   dispatch(LOAD_GAMES(loadGames()))
+    // })()
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    getData()
+    dispatch(fetchGames())
   }, [])
 
   useEffect(() => {
@@ -160,21 +147,6 @@ const NewBet: React.FC = () => {
     clearNumbers(betNumbers)
   }
 
-  // const addToCart = (): void => {
-  //   const bet = {
-  //     id: btoa(String(Date.now())),
-  //     userId: user.id,
-  //     bet: betNumbers,
-  //     kindOfGame: currentGame.type,
-  //     color: currentGame.color,
-  //     price: currentGame.price,
-  //     date: String(new Date())
-  //   }
-  //   setCartItems([...cartItems, bet])
-  //   console.log(cartItems)
-  //   clearGame()
-  // }
-
   const addToCart = (): void => {
     if (betNumbers.length < currentGame['max-number']) return
     const bet = {
@@ -186,7 +158,7 @@ const NewBet: React.FC = () => {
       price: currentGame.price,
       date: String(new Date())
     }
-    dispatch(ADD_NUMBER_OF_BET(bet))
+    dispatch(ADD_BET_TO_CART(bet))
     clearGame()
   }
 

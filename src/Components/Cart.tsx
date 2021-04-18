@@ -7,7 +7,8 @@ import { Span, TitleXS } from './typography'
 import { OutlineButton } from './buttons'
 import CartItem from './CartItem'
 import { floatToReal } from '../Services/floatToReal'
-import { useAppSelector } from '../store/hooks'
+import { useAppSelector, useAppDispatch } from '../store/hooks'
+import { ADD_TO_CHECKOUT } from '../store/gamesReducer'
 
 const HtmlCart = styled.div`
   border: 1px solid #e2e2e2;
@@ -34,7 +35,23 @@ const CartFooter = styled.div`
 `
 
 const Cart = (): JSX.Element => {
-  const cartItems = useAppSelector(state => state.games.bet)
+  const cartItems = useAppSelector(state => state.games.cart)
+  const checkout = useAppSelector(state => state.games.checkout)
+  const dispatch = useAppDispatch()
+  console.log(checkout)
+
+  const totalCart = (): number => {
+    return (
+      cartItems.length &&
+      cartItems.reduce((accumulator: number, currentValue: any) => {
+        return accumulator + Number(currentValue.price)
+      }, 0)
+    )
+  }
+
+  const handleClick = (): void => {
+    dispatch(ADD_TO_CHECKOUT(cartItems))
+  }
 
   return (
     <HtmlCart>
@@ -52,18 +69,18 @@ const Cart = (): JSX.Element => {
               Your Cart has been Empty :'(
             </Span>
           )}
-          {
-          // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+          {// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
           cartItems &&
             cartItems.map((item: any) => {
               return (
-              <CartItem
-                key={item.id}
-                type={item.kindOfGame}
-                price={item.price}
-                bet={item.bet}
-                color={item.color}
-              />
+                <CartItem
+                  key={item.id}
+                  type={item.kindOfGame}
+                  price={item.price}
+                  bet={item.bet}
+                  color={item.color}
+                  id={item.id}
+                />
               )
             })}
         </CartBody>
@@ -71,20 +88,13 @@ const Cart = (): JSX.Element => {
         <TitleXS>
           CART{' '}
           <Span fontStyle='normal' fontWeight='lighter'>
-            TOTAL: R${' '}
-            {!!cartItems.length &&
-              floatToReal(
-                cartItems.reduce((accumulator: number, currentValue: any) => {
-                  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                  return accumulator + currentValue.price
-                }, 0)
-              )}
+            TOTAL: R$ {!!cartItems.length && floatToReal(totalCart())}
           </Span>
         </TitleXS>
       </CartContainer>
       <CartFooter>
         <IconContext.Provider value={{ style: { paddingLeft: '19px' } }}>
-          <OutlineButton color='#27c383'>
+          <OutlineButton onClick={handleClick} disabled={totalCart() <= 30} color='#27c383'>
             Save <IoMdArrowForward />
           </OutlineButton>
         </IconContext.Provider>

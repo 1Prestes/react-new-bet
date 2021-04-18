@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
@@ -45,10 +46,12 @@ const Logo = styled.div`
   }
 `
 
-const NavLink = styled.a`
-  display: inline-flex;
-  margin: 0 40px;
-  color: var(--text-color-primary);
+const NavItem = styled.li`
+  a {
+    display: inline-flex;
+    margin: 0 40px;
+    color: var(--text-color-primary);
+  }
 `
 
 const Navbar: React.FC = () => {
@@ -60,23 +63,23 @@ const Navbar: React.FC = () => {
             <h1 className='title'>TGL</h1>
             <hr />
           </Logo>
-          {/* <ul>
-            <li>
-              <NavLink href='/'>Home</NavLink>
-            </li>
-          </ul> */}
+          <ul>
+            <NavItem>
+              <Link to='/'>Home</Link>
+            </NavItem>
+          </ul>
         </div>
         <div>
           <ul>
-            <li>
-              <NavLink href='/'>Account</NavLink>
-            </li>
+            <NavItem>
+              <Link to='/'>Account</Link>
+            </NavItem>
             <IconContext.Provider value={{ style: { paddingLeft: '20px' } }}>
-              <li>
-                <NavLink href='/'>
+              <NavItem>
+                <Link to='/'>
                   Log out <IoMdArrowForward />
-                </NavLink>
-              </li>
+                </Link>
+              </NavItem>
             </IconContext.Provider>
           </ul>
         </div>

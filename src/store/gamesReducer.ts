@@ -1,52 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { fetchGames } from '../Services/loadGames'
+
 import type { RootState } from './store'
 
-// interface Game {
-//   color: string
-//   description: string
-//   'max-number': number
-//   'min-cart-value': number
-//   price: number
-//   range: number
-//   type: string
-// }
-
-// interface Games extends Game {
-//   games: [{
-//     color: string
-//     description: string
-//     'max-number': number
-//     'min-cart-value': number
-//     price: number
-//     range: number
-//     type: string
-//   }]
-// }
-
-// interface CurrentGame extends Games {
-//   currentGame: {
-//     color: string
-//     description: string
-//     'max-number': number
-//     'min-cart-value': number
-//     price: number
-//     range: number
-//     type: string
-//   }
-// }
-
-// interface Bet {
-//   bet: [{
-//     id: string
-//     userId: string
-//     bet: number[]
-//     kindOfGame: string
-//     color: string
-//     price: number
-//     date: string
-//   }]
-// }
+interface CartItem {
+  id: string
+  userId: string
+  bet: number[]
+  kindOfGame: string
+  color: string
+  price: number
+  date: string
+}
 
 const initialState = {
   games: [{
@@ -67,28 +33,35 @@ const initialState = {
     range: 0,
     type: ''
   },
-  bet: []
+  cart: [],
+  checkout: []
 }
 
 const gamesSlice = createSlice({
   name: 'register',
   initialState,
   reducers: {
-    LOAD_GAMES (state, action) {
-      return { ...state, games: action.payload }
-    },
     SET_CURRENT_GAME (state, action) {
       return { ...state, currentGame: action.payload }
     },
-    ADD_NUMBER_OF_BET (state, action) {
-      return { ...state, bet: state.bet.concat(action.payload) }
+    ADD_BET_TO_CART (state, action) {
+      return { ...state, cart: state.cart.concat(action.payload) }
     },
-    REMOVE_NUMBER_OF_BET (state, action) {
-      return { ...state, bet: action.payload }
+    REMOVE_BET_OF_CART (state, action) {
+      const newCart = state.cart.filter((cartItem: CartItem) => cartItem.id !== action.payload)
+      return { ...state, cart: newCart }
+    },
+    ADD_TO_CHECKOUT (state, action) {
+      return { ...state, checkout: action.payload }
     }
+  },
+  extraReducers: (build) => {
+    build.addCase(fetchGames.fulfilled, (state, action) => {
+      return { ...state, games: action.payload }
+    })
   }
 })
 
-export const { LOAD_GAMES, SET_CURRENT_GAME, ADD_NUMBER_OF_BET, REMOVE_NUMBER_OF_BET } = gamesSlice.actions
+export const { SET_CURRENT_GAME, ADD_BET_TO_CART, REMOVE_BET_OF_CART, ADD_TO_CHECKOUT } = gamesSlice.actions
 export const user = (state: RootState): RootState => state
 export default gamesSlice.reducer

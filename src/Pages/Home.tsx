@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
+import { useAppSelector } from '../store/hooks'
 import Navbar from '../Components/Navbar'
 import { Paragraph, SubTitle } from '../Components/typography'
 import { OutlineButton } from '../Components/buttons'
@@ -49,6 +50,9 @@ const BorderLeft = styled.div`
 `
 
 const Home: React.FC = () => {
+  const games = useAppSelector(state => state.games.games)
+
+  console.log(games)
   return (
     <>
       <Navbar />
