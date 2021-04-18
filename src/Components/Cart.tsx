@@ -7,17 +7,7 @@ import { Span, TitleXS } from './typography'
 import { OutlineButton } from './buttons'
 import CartItem from './CartItem'
 import { floatToReal } from '../Services/floatToReal'
-
-// interface CartItems {
-//   [index: number]: {
-//     bet: number[]
-//     date: string
-//     id: string
-//     kindOfGame: string
-//     price: number
-//     userId: string
-//   }
-// }
+import { useAppSelector } from '../store/hooks'
 
 const HtmlCart = styled.div`
   border: 1px solid #e2e2e2;
@@ -43,36 +33,39 @@ const CartFooter = styled.div`
   height: 96px;
 `
 
-const Cart = ({ cartItems }: any): JSX.Element => {
+const Cart = (): JSX.Element => {
+  const cartItems = useAppSelector(state => state.games.bet)
+
   return (
     <HtmlCart>
       <CartContainer>
         <TitleXS margin='10px auto'>CART</TitleXS>
 
         <CartBody>
-          {false && (
+          {!cartItems.length && (
             <Span
               margin='10px auto'
               fontWeight='lighter'
               className='message message_cart'
               data-message='cart-status'
             >
-              Seu carrinho está vazio!
+              Your Cart has been Empty :'(
             </Span>
           )}
-          {!!cartItems.length &&
+          {
+          // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+          cartItems &&
             cartItems.map((item: any) => {
               return (
-                <CartItem
-                  key={item.id}
-                  type={item.kindOfGame}
-                  price={item.price}
-                  bet={item.bet}
-                  color={item.color}
-                />
+              <CartItem
+                key={item.id}
+                type={item.kindOfGame}
+                price={item.price}
+                bet={item.bet}
+                color={item.color}
+              />
               )
             })}
-          {!cartItems.length && <Span>Your Cart has been Empty :'(</Span>}
         </CartBody>
 
         <TitleXS>

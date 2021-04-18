@@ -24,7 +24,7 @@ import type { RootState } from './store'
 //   }]
 // }
 
-// interface CurrentGame extends Game {
+// interface CurrentGame extends Games {
 //   currentGame: {
 //     color: string
 //     description: string
@@ -34,6 +34,18 @@ import type { RootState } from './store'
 //     range: number
 //     type: string
 //   }
+// }
+
+// interface Bet {
+//   bet: [{
+//     id: string
+//     userId: string
+//     bet: number[]
+//     kindOfGame: string
+//     color: string
+//     price: number
+//     date: string
+//   }]
 // }
 
 const initialState = {

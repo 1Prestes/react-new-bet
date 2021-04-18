@@ -5,6 +5,7 @@ import { IoCartOutline } from 'react-icons/io5'
 
 import { useAppSelector, useAppDispatch } from '../store/hooks'
 import {
+  ADD_NUMBER_OF_BET,
   LOAD_GAMES,
   SET_CURRENT_GAME
 } from '../store/gamesReducer'
@@ -61,7 +62,6 @@ const ActionsContainer = styled.div`
 const NewBet: React.FC = () => {
   const [gameNumbers, setGameNumbers] = useState<number[]>([])
   const [betNumbers, setBetNumbers] = useState<number[]>([])
-  const [cartItems, setCartItems] = useState<Object[]>([])
   const user = useAppSelector(state => state.user.user)
   const games = useAppSelector(state => state.games.games)
   const currentGame = useAppSelector(state => state.games.currentGame)
@@ -160,7 +160,23 @@ const NewBet: React.FC = () => {
     clearNumbers(betNumbers)
   }
 
+  // const addToCart = (): void => {
+  //   const bet = {
+  //     id: btoa(String(Date.now())),
+  //     userId: user.id,
+  //     bet: betNumbers,
+  //     kindOfGame: currentGame.type,
+  //     color: currentGame.color,
+  //     price: currentGame.price,
+  //     date: String(new Date())
+  //   }
+  //   setCartItems([...cartItems, bet])
+  //   console.log(cartItems)
+  //   clearGame()
+  // }
+
   const addToCart = (): void => {
+    if (betNumbers.length < currentGame['max-number']) return
     const bet = {
       id: btoa(String(Date.now())),
       userId: user.id,
@@ -170,23 +186,9 @@ const NewBet: React.FC = () => {
       price: currentGame.price,
       date: String(new Date())
     }
-    setCartItems([...cartItems, bet])
-    console.log(cartItems)
+    dispatch(ADD_NUMBER_OF_BET(bet))
     clearGame()
   }
-
-  // const addToCart = (): void => {
-  //   const bet = {
-  //     id: btoa(String(Date.now())),
-  //     userId: user.id,
-  //     bet: betNumbers,
-  //     kindOfGame: currentGame.type,
-  //     price: currentGame.price,
-  //     date: String(new Date())
-  //   }
-  //   dispatch(ADD_NUMBER_OF_BET(bet))
-  //   clearGame()
-  // }
 
   return (
     <>
@@ -303,7 +305,7 @@ const NewBet: React.FC = () => {
           </Actions>
         </BetGuide>
 
-        <Cart cartItems={cartItems}/>
+        <Cart />
       </BetContainer>
     </>
   )

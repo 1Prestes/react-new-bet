@@ -40,7 +40,7 @@ const CartItem = ({ type, price, bet, color }: Item): JSX.Element => {
       </OutlineButton>
       <CartItemInfo borderColor={color}>
         <Paragraph margin='5px auto' fontSize='0.9375em' color='#868686'>
-          {bet.sort((a, b) => a - b).join(', ')}
+          {bet.slice().sort((a, b) => a - b).join(', ')}
         </Paragraph>
         <Paragraph margin='5px auto' fontSize='0.9375em' fontStyle='normal'>
           <Span color={color}>{type}</Span>
