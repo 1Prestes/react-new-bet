@@ -151,7 +151,7 @@ const Home: React.FC = () => {
               </Span>
             </SubTitle>
           )}
-          {console.log(games)}
+
           {!!betCheckout.length && !gamesFilter.length && (
             <SubTitle fontSize='1.2em' fontStyle='normal'>
               Opsy! I see that you still don't have any bet from type{' '}

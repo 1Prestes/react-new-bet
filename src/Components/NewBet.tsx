@@ -151,6 +151,7 @@ const NewBet: React.FC = () => {
   const chooseNumber = (event: React.FormEvent<HTMLDivElement>): void => {
     const target = event.target as HTMLDivElement
     const numberSelected = Number(target.dataset.number)
+
     if (numberExists(betNumbers, numberSelected)) {
       const arr = removeNumber(betNumbers, numberSelected)
       setBetNumbers(arr)
@@ -170,6 +171,10 @@ const NewBet: React.FC = () => {
   }
 
   const clearGame = (clicked: boolean): void => {
+    if (betNumbers.length === 0) {
+      showMessage('error', 'no number selected')
+      return
+    }
     setBetNumbers([])
     clearNumbers(betNumbers)
     if (clicked) showMessage('success', 'Clear game successfully')
@@ -277,7 +282,6 @@ const NewBet: React.FC = () => {
               </OutlineButton>
               <OutlineButton
                 onClick={() => clearGame(true)}
-                disabled={betNumbers.length === 0}
                 margin='5px 25px auto 0'
                 padding='17px 25px'
                 fontWeight='600'

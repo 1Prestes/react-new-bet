@@ -12,6 +12,19 @@ import { useAppSelector, useAppDispatch } from '../store/hooks'
 import { ADD_TO_CHECKOUT } from '../store/gamesReducer'
 import { showMessage } from '../Services/toast'
 
+interface CurrentValue {
+  price: number
+}
+
+interface ICartItem {
+  key: string
+  kindOfGame: string
+  price: number
+  bet: number[]
+  color: string
+  id: string
+}
+
 const HtmlCart = styled.div`
   border: 1px solid #e2e2e2;
   border-radius: 10px;
@@ -44,14 +57,18 @@ const Cart = (): JSX.Element => {
   const totalCart = (): number => {
     return (
       cartItems.length &&
-      cartItems.reduce((accumulator: number, currentValue: any) => {
-        return accumulator + Number(currentValue.price)
+      cartItems.reduce((accumulator: number, currentValue: CurrentValue) => {
+        return accumulator + currentValue.price
       }, 0)
     )
   }
 
   const checkout = (): void => {
-    showMessage('success', 'Congratulations, you will be redirected in 2 seconds', 2000)
+    showMessage(
+      'success',
+      'Congratulations, you will be redirected in 2 seconds',
+      2000
+    )
     setTimeout(() => {
       dispatch(ADD_TO_CHECKOUT(cartItems))
       history.push('/home')
@@ -76,7 +93,7 @@ const Cart = (): JSX.Element => {
           )}
           {// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
           cartItems &&
-            cartItems.map((item: any) => {
+            cartItems.map((item: ICartItem) => {
               return (
                 <CartItem
                   key={item.id}

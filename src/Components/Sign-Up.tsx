@@ -19,7 +19,6 @@ const SignUp: React.FC = () => {
   const history = useHistory()
 
   useEffect(() => {
-    console.log(currentUser)
     if (currentUser.token) history.push('/')
     if (currentUser.error) showMessage('error', currentUser.error)
   }, [currentUser])
@@ -46,13 +45,8 @@ const SignUp: React.FC = () => {
 
     await schema
       .validate(newUser)
-      .then(res => {
-        dispatch(REGISTER_USER(res))
-      })
-      .catch(err => {
-        console.log(err.errors[0])
-        showMessage('error', err.errors[0])
-      })
+      .then(res => dispatch(REGISTER_USER(res)))
+      .catch(err => showMessage('error', err.errors[0]))
   }
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
