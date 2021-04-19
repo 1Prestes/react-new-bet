@@ -65,10 +65,6 @@ const NewBet: React.FC = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    // console.log(loadGames())
-    // ;(function anyNameFunction () {
-    //   dispatch(LOAD_GAMES(loadGames()))
-    // })()
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(fetchGames())
   }, [])

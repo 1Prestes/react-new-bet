@@ -52,7 +52,7 @@ const gamesSlice = createSlice({
       return { ...state, cart: newCart }
     },
     ADD_TO_CHECKOUT (state, action) {
-      return { ...state, checkout: action.payload }
+      return { ...state, checkout: action.payload, cart: [] }
     }
   },
   extraReducers: (build) => {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
@@ -36,9 +37,8 @@ const CartFooter = styled.div`
 
 const Cart = (): JSX.Element => {
   const cartItems = useAppSelector(state => state.games.cart)
-  const checkout = useAppSelector(state => state.games.checkout)
   const dispatch = useAppDispatch()
-  console.log(checkout)
+  const history = useHistory()
 
   const totalCart = (): number => {
     return (
@@ -51,6 +51,7 @@ const Cart = (): JSX.Element => {
 
   const handleClick = (): void => {
     dispatch(ADD_TO_CHECKOUT(cartItems))
+    history.push('/home')
   }
 
   return (
@@ -94,7 +95,11 @@ const Cart = (): JSX.Element => {
       </CartContainer>
       <CartFooter>
         <IconContext.Provider value={{ style: { paddingLeft: '19px' } }}>
-          <OutlineButton onClick={handleClick} disabled={totalCart() <= 30} color='#27c383'>
+          <OutlineButton
+            onClick={handleClick}
+            disabled={totalCart() < 30}
+            color='#27c383'
+          >
             Save <IoMdArrowForward />
           </OutlineButton>
         </IconContext.Provider>

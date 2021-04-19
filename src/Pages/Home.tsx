@@ -1,13 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
-import { useAppSelector } from '../store/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 import Navbar from '../Components/Navbar'
 import { Paragraph, SubTitle } from '../Components/typography'
 import { OutlineButton } from '../Components/buttons'
+import { fetchGames } from '../Services/loadGames'
+import { floatToReal } from '../Services/floatToReal'
+
+interface Bet {
+  id: string
+  userId: string
+  bet: number[]
+  kindOfGame: string
+  color: string
+  price: number
+  date: string
+}
 
 const Container = styled.div`
   display: flex;
@@ -50,9 +62,24 @@ const BorderLeft = styled.div`
 `
 
 const Home: React.FC = () => {
+  const [filter, setFilter] = useState<string>()
+  const [gamesFilter, setGamesFilter] = useState<Bet[]>()
   const games = useAppSelector(state => state.games.games)
+  const betCheckout: Bet[] = useAppSelector(state => state.games.checkout)
+  const dispatch = useAppDispatch()
 
-  console.log(games)
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    dispatch(fetchGames())
+    setGamesFilter(betCheckout)
+  }, [])
+
+  const selectFilter = (filter: string): void => {
+    const currentBetsFilter = betCheckout.filter(game => game.kindOfGame === filter)
+    setFilter(filter)
+    setGamesFilter(currentBetsFilter)
+  }
+
   return (
     <>
       <Navbar />
@@ -66,31 +93,30 @@ const Home: React.FC = () => {
             <Paragraph margin='0 10px' color='#868686' fontSize='1.0625em'>
               Filters
             </Paragraph>
-            <OutlineButton
-              fontSize='0.875em'
-              border='2px solid #7f3992'
-              color='#7f3992'
-              margin='auto 10px'
-            >
-              Lotofácil
-            </OutlineButton>
-            <OutlineButton
-              fontSize='0.875em'
-              border='2px solid #01ac66'
-              color='#fff'
-              backgroundColor='#01ac66'
-              margin='auto 10px'
-            >
-              Mega-Sena
-            </OutlineButton>
-            <OutlineButton
-              fontSize='0.875em'
-              border='2px solid #f79c31'
-              color='#f79c31'
-              margin='auto 10px'
-            >
-              Lotomania
-            </OutlineButton>
+            {games?.map(game => {
+              let { color, type } = game
+              let backgroundColor = 'transparent'
+              const border = color
+              if (game.type === filter) {
+                backgroundColor = color
+                color = '#fff'
+              }
+
+              return (
+                <OutlineButton
+                  key={game.type}
+                  onClick={() => selectFilter(game.type)}
+                  data-current-game={game.type}
+                  fontSize='0.875em'
+                  color={color}
+                  backgroundColor={backgroundColor}
+                  border={`2px solid ${border}`}
+                  margin='auto 10px'
+                >
+                  {type}
+                </OutlineButton>
+              )
+            })}
           </FilterContainer>
 
           <IconContext.Provider value={{ style: { marginLeft: '10px' } }}>
@@ -103,7 +129,34 @@ const Home: React.FC = () => {
         </Actions>
 
         <Games>
-          <Game>
+          {gamesFilter?.map((bet: Bet) => {
+            return (
+              <Game key={bet.id}>
+                <BorderLeft color={bet.color} />
+                <div>
+                  <Paragraph fontSize='1.25em' color='#868686'>
+                    {bet.bet
+                      .slice()
+                      .sort((a, b) => a - b)
+                      .join(', ')}
+                  </Paragraph>
+                  <Paragraph
+                    margin='15px auto'
+                    fontSize='17px'
+                    color='#868686'
+                    fontWeight='normal'
+                  >
+                    {new Date(bet.date).toLocaleDateString('pt-br')} - (R${' '}
+                    {floatToReal(bet.price)})
+                  </Paragraph>
+                  <SubTitle fontSize='1.25em' color={bet.color}>
+                    {bet.kindOfGame}
+                  </SubTitle>
+                </div>
+              </Game>
+            )
+          })}
+          {/* <Game>
             <BorderLeft color='#7f3992' />
             <div>
               <Paragraph fontSize='1.25em' color='#868686'>
@@ -161,7 +214,7 @@ const Home: React.FC = () => {
                 Lotomania
               </SubTitle>
             </div>
-          </Game>
+          </Game> */}
         </Games>
       </Container>
     </>

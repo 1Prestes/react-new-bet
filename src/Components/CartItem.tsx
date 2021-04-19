@@ -38,7 +38,6 @@ const CartItemInfo = styled.div<CartInfo>`
 const CartItem = ({ type, price, bet, color, id }: Item): JSX.Element => {
   const dispatch = useAppDispatch()
   const handleClick = (id: string): void => {
-    console.log(id)
     dispatch(REMOVE_BET_OF_CART(id))
   }
 
