@@ -11,7 +11,7 @@ const GameNumber = styled.div`
   justify-content: center;
   align-items: center;
   background: #adc0c4;
-  margin: 20px 12px 20px 0;
+  margin: 20px 5px 20px 5px;
   width: 65px;
   height: 65px;
   border-radius: 100px;
@@ -19,6 +19,10 @@ const GameNumber = styled.div`
   font-weight: 700;
   cursor: pointer;
   color: #fff;
+
+  @media (min-width: 576px) {
+    margin: 20px 12px 20px 0;
+  }
 `
 
 const GameNumbers = ({

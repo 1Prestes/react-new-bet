@@ -43,7 +43,7 @@ export const OutlineButton = styled.button<ButtonProps>`
   align-items: center;
   background-color: ${props => props.backgroundColor ?? 'transparent'};
   width: ${props => props.width ?? 'max-content'};
-  margin: ${props => props.margin ?? 0};
+  margin: 10px 5px;
   padding: ${props => props.padding ?? '10px 20px'};
   border-radius: 10px;
   border: ${props => props.border ?? 'none'};
@@ -65,5 +65,9 @@ export const OutlineButton = styled.button<ButtonProps>`
     align-items: center;
     cursor: pointer;
     color: ${props => props.color};
+  }
+
+  @media (min-width: 804px) {
+    margin: ${props => props.margin ?? 0};
   }
 `

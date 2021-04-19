@@ -26,8 +26,12 @@ const Container = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   max-width: 1440px;
-  margin: 80px auto;
+  margin: 130px auto;
   padding: 0 10%;
+
+  @media (min-width: 678px) {
+    margin: 80px auto;
+  }
 `
 
 const Actions = styled.div`
@@ -40,6 +44,11 @@ const FilterContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+`
+
+const Filters = styled.div`
+  display: flex;
+  flex-wrap: wrap;
 `
 
 const Games = styled.main`
@@ -95,30 +104,32 @@ const Home: React.FC = () => {
             <Paragraph margin='0 10px' color='#868686' fontSize='1.0625em'>
               Filters
             </Paragraph>
-            {games?.map(game => {
-              let { color, type } = game
-              let backgroundColor = 'transparent'
-              const border = color
-              if (game.type === filter) {
-                backgroundColor = color
-                color = '#fff'
-              }
+            <Filters>
+              {games?.map(game => {
+                let { color, type } = game
+                let backgroundColor = 'transparent'
+                const border = color
+                if (game.type === filter) {
+                  backgroundColor = color
+                  color = '#fff'
+                }
 
-              return (
-                <OutlineButton
-                  key={game.type}
-                  onClick={() => selectFilter(game.type)}
-                  data-current-game={game.type}
-                  fontSize='0.875em'
-                  color={color}
-                  backgroundColor={backgroundColor}
-                  border={`2px solid ${border}`}
-                  margin='auto 10px'
-                >
-                  {type}
-                </OutlineButton>
-              )
-            })}
+                return (
+                  <OutlineButton
+                    key={game.type}
+                    onClick={() => selectFilter(game.type)}
+                    data-current-game={game.type}
+                    fontSize='0.875em'
+                    color={color}
+                    backgroundColor={backgroundColor}
+                    border={`2px solid ${border}`}
+                    margin='auto 10px'
+                  >
+                    {type}
+                  </OutlineButton>
+                )
+              })}
+            </Filters>
           </FilterContainer>
 
           <IconContext.Provider value={{ style: { marginLeft: '10px' } }}>

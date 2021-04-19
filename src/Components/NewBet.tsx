@@ -21,18 +21,36 @@ const BetContainer = styled.main`
   flex-wrap: wrap;
   justify-content: center;
   align-items: baseline;
-  margin: 75px auto;
+  margin: 130px auto;
   max-width: 1440px;
+  padding: 0 10px;
+
+  @media (min-width: 678px) {
+    margin: 75px auto;
+  }
 `
 
 const BetGuide = styled.div`
-  max-width: 750px;
-  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  @media (min-width: 576px) {
+    display: block;
+    max-width: 750px;
+    padding: 0 10px;
+  }
 `
 
 const GameInfo = styled.div`
   margin-top: 35px;
   max-width: 648px;
+  padding: 0 20px;
+
+  @media (min-width: 576px) {
+    padding: inherit;
+  }
 `
 
 const GamesContainer = styled.div`
@@ -43,7 +61,12 @@ const GamesContainer = styled.div`
 const ChooseNumber = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   margin: 30px 0 40px 0;
+
+  @media (min-width: 576px) {
+    justify-content: flex-start;
+  }
 `
 
 const Actions = styled.div`
@@ -55,6 +78,13 @@ const Actions = styled.div`
 
 const ActionsContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+
+  @media (min-width: 678px) {
+    width: inherit;
+  }
 `
 
 const NewBet: React.FC = () => {
