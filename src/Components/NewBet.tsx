@@ -111,51 +111,21 @@ const NewBet: React.FC = () => {
     }
   }, [currentGame])
 
-  useEffect(() => {
-    clearNumbers(betNumbers)
-    paintNumbers(betNumbers)
-  }, [betNumbers])
-
   const toggleGame = (event: React.FormEvent<HTMLButtonElement>): void => {
     const target = event.target as HTMLButtonElement
     const currentGame = games.filter(
       game => game.type === target.dataset.currentGame
     )
     setBetNumbers([])
-    clearNumbers(betNumbers)
     dispatch(SET_CURRENT_GAME(currentGame[0]))
   }
 
-  // const paintNumber = (element: HTMLDivElement, color: string): void => {
-  //   element.style.setProperty('background-color', color)
-  // }
-
-  const clearNumbers = (arrNumbers: number[]): void => {
-    arrNumbers.map((number: number) => {
-      const element = document.querySelector(
-        `div[data-number="${number}"]`
-      ) as HTMLElement
-      return element?.removeAttribute('data-number-selected')
-    })
-  }
-
-  const paintNumbers = (arrNumbers: number[]): void => {
-    arrNumbers.map((number: number) => {
-      const element = document.querySelector(
-        `div[data-number="${number}"]`
-      ) as HTMLElement
-      return element?.setAttribute('data-number-selected', 'selected')
-    })
-  }
-
-  const chooseNumber = (event: React.FormEvent<HTMLDivElement>): void => {
-    const target = event.target as HTMLDivElement
-    const numberSelected = Number(target.dataset.number)
+  const chooseNumber = (event: React.MouseEvent<HTMLDivElement>): void => {
+    const numberSelected = Number(event.currentTarget.dataset.number)
 
     if (numberExists(betNumbers, numberSelected)) {
       const arr = removeNumber(betNumbers, numberSelected)
-      setBetNumbers(arr)
-      return clearNumbers(betNumbers)
+      return setBetNumbers(arr)
     }
 
     if (betNumbers.length >= currentGame['max-number']) return
@@ -166,8 +136,7 @@ const NewBet: React.FC = () => {
     const amount = currentGame['max-number'] - betNumbers.length
     const range = currentGame.range
     const completedNumbers = generateGameNumbers(amount, range, betNumbers)
-    setBetNumbers(completedNumbers)
-    paintNumbers(betNumbers)
+    setBetNumbers([...betNumbers, ...completedNumbers])
   }
 
   const clearGame = (clicked: boolean): void => {
@@ -176,7 +145,6 @@ const NewBet: React.FC = () => {
       return
     }
     setBetNumbers([])
-    clearNumbers(betNumbers)
     if (clicked) showMessage('success', 'Clear game successfully')
   }
 
@@ -201,6 +169,21 @@ const NewBet: React.FC = () => {
     dispatch(ADD_BET_TO_CART(bet))
     showMessage('success', 'Bet added on cart :D')
     clearGame(false)
+  }
+
+  const renderNumbers = (): JSX.Element[] => {
+    return gameNumbers.map(number => {
+      let selected = false
+      if (betNumbers.includes(number)) selected = true
+      return (
+        <GameNumbers
+          key={number}
+          number={number}
+          selected={selected}
+          clicked={chooseNumber}
+        />
+      )
+    })
   }
 
   return (
@@ -255,16 +238,7 @@ const NewBet: React.FC = () => {
             </Paragraph>
           </GameInfo>
 
-          <ChooseNumber>
-            {currentGame &&
-              gameNumbers.map(number => (
-                <GameNumbers
-                  key={number}
-                  number={number}
-                  clicked={chooseNumber}
-                />
-              ))}
-          </ChooseNumber>
+          <ChooseNumber>{renderNumbers()}</ChooseNumber>
 
           <Actions>
             <ActionsContainer>

@@ -115,17 +115,19 @@ const Cart = (): JSX.Element => {
           </TitleXS>
         )}
       </CartContainer>
-      <CartFooter>
-        <IconContext.Provider value={{ style: { paddingLeft: '19px' } }}>
-          <OutlineButton
-            onClick={checkout}
-            disabled={totalCart() < 30}
-            color='#27c383'
-          >
-            Save <IoMdArrowForward />
-          </OutlineButton>
-        </IconContext.Provider>
-      </CartFooter>
+      {!!totalCart() && (
+        <CartFooter>
+          <IconContext.Provider value={{ style: { paddingLeft: '19px' } }}>
+            <OutlineButton
+              onClick={checkout}
+              disabled={totalCart() < 30}
+              color='#27c383'
+            >
+              Save <IoMdArrowForward />
+            </OutlineButton>
+          </IconContext.Provider>
+        </CartFooter>
+      )}
     </HtmlCart>
   )
 }

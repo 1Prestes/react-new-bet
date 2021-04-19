@@ -3,14 +3,19 @@ import styled from 'styled-components'
 
 interface IGameNumber {
   number: number
+  selected: boolean
   clicked: React.MouseEventHandler<HTMLDivElement> | undefined
 }
 
-const GameNumber = styled.div`
+interface NumberSelected {
+  selected: boolean
+}
+
+const GameNumber = styled.div<NumberSelected>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #adc0c4;
+  background: ${props => props.selected ? 'green' : '#adc0c4'};
   margin: 20px 5px 20px 5px;
   width: 65px;
   height: 65px;
@@ -27,10 +32,11 @@ const GameNumber = styled.div`
 
 const GameNumbers = ({
   number,
-  clicked
+  clicked,
+  selected
 }: IGameNumber): React.ReactElement => {
   return (
-    <GameNumber onClick={clicked} data-number={number}>
+    <GameNumber onClick={clicked} data-number={number} selected={selected}>
       {number < 10 ? `0${number}` : number}
     </GameNumber>
   )
