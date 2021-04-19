@@ -10,6 +10,7 @@ import CartItem from './CartItem'
 import { floatToReal } from '../Services/floatToReal'
 import { useAppSelector, useAppDispatch } from '../store/hooks'
 import { ADD_TO_CHECKOUT } from '../store/gamesReducer'
+import { showMessage } from '../Services/toast'
 
 const HtmlCart = styled.div`
   border: 1px solid #e2e2e2;
@@ -50,8 +51,11 @@ const Cart = (): JSX.Element => {
   }
 
   const handleClick = (): void => {
-    dispatch(ADD_TO_CHECKOUT(cartItems))
-    history.push('/home')
+    showMessage('success', 'Congratulations, you will be redirected in 5 seconds')
+    setTimeout(() => {
+      dispatch(ADD_TO_CHECKOUT(cartItems))
+      history.push('/home')
+    }, 5000)
   }
 
   return (
@@ -85,13 +89,14 @@ const Cart = (): JSX.Element => {
               )
             })}
         </CartBody>
-
-        <TitleXS>
-          CART{' '}
-          <Span fontStyle='normal' fontWeight='lighter'>
-            TOTAL: R$ {!!cartItems.length && floatToReal(totalCart())}
-          </Span>
-        </TitleXS>
+        {!!cartItems.length && (
+          <TitleXS>
+            CART{' '}
+            <Span fontStyle='normal' fontWeight='lighter'>
+              TOTAL: R$ {floatToReal(totalCart())}
+            </Span>
+          </TitleXS>
+        )}
       </CartContainer>
       <CartFooter>
         <IconContext.Provider value={{ style: { paddingLeft: '19px' } }}>

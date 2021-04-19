@@ -11,6 +11,7 @@ import Form, { AuthenticationFormContainer } from './Form'
 import Input from './Input'
 import { TitleSM } from '../Components/typography'
 import { OutlineButton } from '../Components/buttons'
+import { showMessage } from '../Services/toast'
 
 const ForgetPasswordParagraph = styled.p`
   margin: 27px;
@@ -28,10 +29,8 @@ const Login: React.FC = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    console.log(currentUser)
-    if (currentUser.token) {
-      history.push('/')
-    }
+    if (currentUser.token) history.push('/')
+    if (currentUser.error) showMessage('error', currentUser.error)
   }, [currentUser])
 
   const schema = yup.object().shape({
@@ -60,7 +59,7 @@ const Login: React.FC = () => {
       .then(res => {
         dispatch(AUTH_USER({ login: res }))
       })
-      .catch(err => console.log(err.errors))
+      .catch(err => showMessage('error', err.errors[0]))
   }
 
   return (

@@ -14,6 +14,7 @@ import GameNumbers from './GameNumbers'
 import { numberExists } from '../Services/numberExists'
 import { removeNumber } from '../Services/removeNumber'
 import { generateGameNumbers } from '../Services/generateGameNumbers'
+import { showMessage } from '../Services/toast'
 
 const BetContainer = styled.main`
   display: flex;
@@ -138,13 +139,21 @@ const NewBet: React.FC = () => {
     paintNumbers(betNumbers)
   }
 
-  const clearGame = (): void => {
+  const clearGame = (clicked: boolean): void => {
     setBetNumbers([])
     clearNumbers(betNumbers)
+    if (clicked) showMessage('success', 'Clear game successfully')
   }
 
   const addToCart = (): void => {
-    if (betNumbers.length < currentGame['max-number']) return
+    if (betNumbers.length < currentGame['max-number']) {
+      const missingNumbers = currentGame['max-number'] - betNumbers.length
+      showMessage(
+        'error',
+        `Select more ${missingNumbers} numbers to complete your bet`
+      )
+      return
+    }
     const bet = {
       id: btoa(String(Date.now())),
       userId: user.id,
@@ -155,7 +164,8 @@ const NewBet: React.FC = () => {
       date: String(new Date())
     }
     dispatch(ADD_BET_TO_CART(bet))
-    clearGame()
+    showMessage('success', 'Bet added on cart :D')
+    clearGame(false)
   }
 
   return (
@@ -236,7 +246,7 @@ const NewBet: React.FC = () => {
                 Complete Game
               </OutlineButton>
               <OutlineButton
-                onClick={clearGame}
+                onClick={() => clearGame(true)}
                 margin='5px 25px auto 0'
                 padding='17px 25px'
                 fontWeight='600'

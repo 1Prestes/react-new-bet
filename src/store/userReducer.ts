@@ -25,7 +25,7 @@ const usersSlice = createSlice({
   reducers: {
     REGISTER_USER (state, action) {
       const user = createUser(action.payload)
-      if (user === 'E-mail exists') return { ...state, user: {}, error: user }
+      if (user === 'E-mail exists') return { ...state, user: {}, error: 'This email has being used' }
 
       setCookie('@AUTH_TOKEN', user.token)
       return { ...state, user: user.user, token: user.token, error: '' }

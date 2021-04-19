@@ -4,6 +4,8 @@ import { ThemeProvider } from 'styled-components'
 import GlobalStyles from './assets/styles/global-styles'
 import ResetCSS from './assets/styles/reset-css'
 import theme from './assets/styles/theme'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import Routes from './routes'
 
 const App: React.FC = () => {
@@ -12,6 +14,7 @@ const App: React.FC = () => {
       <ResetCSS />
       <GlobalStyles />
       <Routes />
+      <ToastContainer />
     </ThemeProvider>
   )
 }

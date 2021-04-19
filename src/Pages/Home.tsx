@@ -6,7 +6,7 @@ import { IoMdArrowForward } from 'react-icons/io'
 
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import Navbar from '../Components/Navbar'
-import { Paragraph, SubTitle } from '../Components/typography'
+import { Paragraph, Span, SubTitle } from '../Components/typography'
 import { OutlineButton } from '../Components/buttons'
 import { fetchGames } from '../Services/loadGames'
 import { floatToReal } from '../Services/floatToReal'
@@ -63,7 +63,7 @@ const BorderLeft = styled.div`
 
 const Home: React.FC = () => {
   const [filter, setFilter] = useState<string>()
-  const [gamesFilter, setGamesFilter] = useState<Bet[]>()
+  const [gamesFilter, setGamesFilter] = useState<Bet[]>([])
   const games = useAppSelector(state => state.games.games)
   const betCheckout: Bet[] = useAppSelector(state => state.games.checkout)
   const dispatch = useAppDispatch()
@@ -75,7 +75,9 @@ const Home: React.FC = () => {
   }, [])
 
   const selectFilter = (filter: string): void => {
-    const currentBetsFilter = betCheckout.filter(game => game.kindOfGame === filter)
+    const currentBetsFilter = betCheckout.filter(
+      game => game.kindOfGame === filter
+    )
     setFilter(filter)
     setGamesFilter(currentBetsFilter)
   }
@@ -129,6 +131,26 @@ const Home: React.FC = () => {
         </Actions>
 
         <Games>
+          {!betCheckout.length && (
+            <SubTitle fontSize='1.2em' fontStyle='normal'>
+              Opsy! It seems that you still don't have any bet done. Why don't
+              you go to the bet page and{' '}
+              <Span color='green'>
+                <Link to='/new-bet'>start it right now?</Link>
+              </Span>
+            </SubTitle>
+          )}
+          {console.log(games)}
+          {!!betCheckout.length && !gamesFilter.length && (
+            <SubTitle fontSize='1.2em' fontStyle='normal'>
+              Opsy! I see that you still don't have any bet from type{' '}
+              <Span color={'#505050'}>{filter}</Span>, what about you move to
+              the bet page and{' '}
+              <Span color='green'>
+                <Link to='/new-bet'>take a chance right now?</Link>
+              </Span>
+            </SubTitle>
+          )}
           {gamesFilter?.map((bet: Bet) => {
             return (
               <Game key={bet.id}>
@@ -156,65 +178,6 @@ const Home: React.FC = () => {
               </Game>
             )
           })}
-          {/* <Game>
-            <BorderLeft color='#7f3992' />
-            <div>
-              <Paragraph fontSize='1.25em' color='#868686'>
-                01, 02, 04, 05, 06, 07, 09, 15, 17, 20, 21, 22, 23, 24, 25
-              </Paragraph>
-              <Paragraph
-                margin='15px auto'
-                fontSize='17px'
-                color='#868686'
-                fontWeight='normal'
-              >
-                30/11/2020 - (R$ 2,50)
-              </Paragraph>
-              <SubTitle fontSize='1.25em' color='#7f3992'>
-                Lotofácil
-              </SubTitle>
-            </div>
-          </Game>
-
-          <Game>
-            <BorderLeft color='#01ac66' />
-            <div>
-              <Paragraph fontSize='1.25em' color='#868686'>
-                01, 02, 04, 05, 06, 07, 09, 15, 17, 20, 21, 22, 23, 24, 25
-              </Paragraph>
-              <Paragraph
-                margin='15px auto'
-                fontSize='17px'
-                color='#868686'
-                fontWeight='normal'
-              >
-                30/11/2020 - (R$ 2,50)
-              </Paragraph>
-              <SubTitle fontSize='1.25em' color='#01ac66'>
-                Mega-Sena
-              </SubTitle>
-            </div>
-          </Game>
-
-          <Game>
-            <BorderLeft color='#f79c31' />
-            <div>
-              <Paragraph fontSize='1.25em' color='#868686'>
-                01, 02, 04, 05, 06, 07, 09, 15, 17, 20, 21, 22, 23, 24, 25
-              </Paragraph>
-              <Paragraph
-                margin='15px auto'
-                fontSize='17px'
-                color='#868686'
-                fontWeight='normal'
-              >
-                30/11/2020 - (R$ 2,50)
-              </Paragraph>
-              <SubTitle fontSize='1.25em' color='#f79c31'>
-                Lotomania
-              </SubTitle>
-            </div>
-          </Game> */}
         </Games>
       </Container>
     </>

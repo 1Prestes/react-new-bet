@@ -12,6 +12,7 @@ export const TitleXS = styled.h1<Typography>`
   margin: ${props => props.margin ?? 'auto'};
   font-size: ${props => props.theme.typography.xs};
   text-transform: ${props => props.textTransform ?? 'none'};
+  font-style: ${props => props.fontStyle ?? 'italic'};
   color: ${props => props.color ?? props.theme.typography.color};
 `
 
@@ -19,6 +20,7 @@ export const TitleSM = styled.h1<Typography>`
   margin: ${props => props.margin ?? 'auto'};
   font-size: ${props => props.theme.typography.sm};
   text-transform: ${props => props.textTransform ?? 'none'};
+  font-style: ${props => props.fontStyle ?? 'italic'};
   color: ${props => props.color ?? props.theme.typography.color};
 `
 
@@ -26,6 +28,7 @@ export const TitleMD = styled.h1<Typography>`
   margin: ${props => props.margin ?? 'auto'};
   font-size: ${props => props.theme.typography.md};
   text-transform: ${props => props.textTransform ?? 'none'};
+  font-style: ${props => props.fontStyle ?? 'italic'};
   color: ${props => props.color ?? props.theme.typography.color};
 `
 
@@ -33,6 +36,7 @@ export const TitleXL = styled.h1<Typography>`
   margin: ${props => props.margin ?? 'auto'};
   font-size: ${props => props.theme.typography.md};
   text-transform: ${props => props.textTransform ?? 'none'};
+  font-style: ${props => props.fontStyle ?? 'italic'};
   color: ${props => props.color ?? props.theme.typography.color};
 `
 
@@ -61,4 +65,8 @@ export const Span = styled.span<Typography>`
   font-style: ${props => props.fontStyle ?? 'italic'};
   text-transform: ${props => props.textTransform ?? 'none'};
   color: ${props => props.color ?? props.theme.typography.color};
+
+  * {
+    color: ${props => props.color ?? props.theme.typography.color};
+  }
 `

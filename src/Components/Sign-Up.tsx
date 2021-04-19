@@ -10,6 +10,7 @@ import { TitleSM } from './typography'
 import { OutlineButton } from './buttons'
 import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 import { REGISTER_USER } from '../store/userReducer'
+import { showMessage } from '../Services/toast'
 
 const SignUp: React.FC = () => {
   const [newUser, setNewUser] = useState({ name: '', email: '', password: '' })
@@ -19,24 +20,23 @@ const SignUp: React.FC = () => {
 
   useEffect(() => {
     console.log(currentUser)
-    if (currentUser.token) {
-      history.push('/')
-    }
+    if (currentUser.token) history.push('/')
+    if (currentUser.error) showMessage('error', currentUser.error)
   }, [currentUser])
 
   const schema = yup.object().shape({
-    name: yup
+    password: yup
       .string()
-      .min(3)
-      .required(''),
+      .min(6)
+      .required(),
     email: yup
       .string()
       .email()
       .required(),
-    password: yup
+    name: yup
       .string()
-      .min(6)
-      .required()
+      .min(3)
+      .required('')
   })
 
   const handleClick = async (
@@ -49,7 +49,10 @@ const SignUp: React.FC = () => {
       .then(res => {
         dispatch(REGISTER_USER(res))
       })
-      .catch(err => err.errors)
+      .catch(err => {
+        console.log(err.errors[0])
+        showMessage('error', err.errors[0])
+      })
   }
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {

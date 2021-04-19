@@ -7,6 +7,7 @@ import { Paragraph, Span } from './typography'
 import { floatToReal } from '../Services/floatToReal'
 import { useAppDispatch } from '../store/hooks'
 import { REMOVE_BET_OF_CART } from '../store/gamesReducer'
+import { showMessage } from '../Services/toast'
 
 interface Item {
   type: string
@@ -39,6 +40,7 @@ const CartItem = ({ type, price, bet, color, id }: Item): JSX.Element => {
   const dispatch = useAppDispatch()
   const handleClick = (id: string): void => {
     dispatch(REMOVE_BET_OF_CART(id))
+    showMessage('success', 'Bet removed successfully')
   }
 
   return (
