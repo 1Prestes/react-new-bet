@@ -4,6 +4,9 @@ import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
+import { useAppDispatch } from '../store/hooks'
+import { LOGOUT_USER } from '../store/userReducer'
+
 const Header = styled.header`
   border-bottom: 2px solid #ebebeb;
 `
@@ -55,6 +58,11 @@ const NavItem = styled.li`
 `
 
 const Navbar: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const logout = (): void => {
+    dispatch(LOGOUT_USER())
+  }
+
   return (
     <Header>
       <HtmlNavbar>
@@ -75,7 +83,7 @@ const Navbar: React.FC = () => {
               <Link to='/'>Account</Link>
             </NavItem>
             <IconContext.Provider value={{ style: { paddingLeft: '20px' } }}>
-              <NavItem>
+              <NavItem onClick={logout}>
                 <Link to='/'>
                   Log out <IoMdArrowForward />
                 </Link>

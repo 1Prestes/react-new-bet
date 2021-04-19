@@ -36,10 +36,13 @@ const usersSlice = createSlice({
 
       setCookie('@AUTH_TOKEN', newAuth.token)
       return { ...state, user: newAuth.user, token: newAuth.token, error: '' }
+    },
+    LOGOUT_USER (state) {
+      return { ...state, user: {}, token: '', error: '' }
     }
   }
 })
 
-export const { REGISTER_USER, AUTH_USER } = usersSlice.actions
+export const { REGISTER_USER, AUTH_USER, LOGOUT_USER } = usersSlice.actions
 // export const user = (state: RootState): RootState => state
 export default usersSlice.reducer
