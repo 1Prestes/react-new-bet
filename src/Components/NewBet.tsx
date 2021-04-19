@@ -170,7 +170,7 @@ const NewBet: React.FC = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar linkToHome={true} />
 
       <BetContainer>
         <BetGuide>

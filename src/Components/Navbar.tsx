@@ -7,6 +7,10 @@ import { IoMdArrowForward } from 'react-icons/io'
 import { useAppDispatch } from '../store/hooks'
 import { LOGOUT_USER } from '../store/userReducer'
 
+interface LinkToHome {
+  linkToHome?: boolean
+}
+
 const Header = styled.header`
   border-bottom: 2px solid #ebebeb;
 `
@@ -57,7 +61,7 @@ const NavItem = styled.li`
   }
 `
 
-const Navbar: React.FC = () => {
+const Navbar = ({ linkToHome }: LinkToHome): JSX.Element => {
   const dispatch = useAppDispatch()
   const logout = (): void => {
     dispatch(LOGOUT_USER())
@@ -71,11 +75,13 @@ const Navbar: React.FC = () => {
             <h1 className='title'>TGL</h1>
             <hr />
           </Logo>
-          <ul>
-            <NavItem>
-              <Link to='/'>Home</Link>
-            </NavItem>
-          </ul>
+          {linkToHome && (
+            <ul>
+              <NavItem>
+                <Link to='/'>Home</Link>
+              </NavItem>
+            </ul>
+          )}
         </div>
         <div>
           <ul>
