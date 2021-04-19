@@ -219,7 +219,7 @@ const NewBet: React.FC = () => {
               {currentGame?.description}
             </Paragraph>
           </GameInfo>
-          {betNumbers.sort((a, b) => a - b).join(', ')}
+
           <ChooseNumber>
             {currentGame &&
               gameNumbers.map(number => (
@@ -247,6 +247,7 @@ const NewBet: React.FC = () => {
               </OutlineButton>
               <OutlineButton
                 onClick={() => clearGame(true)}
+                disabled={betNumbers.length === 0}
                 margin='5px 25px auto 0'
                 padding='17px 25px'
                 fontWeight='600'

@@ -50,12 +50,12 @@ const Cart = (): JSX.Element => {
     )
   }
 
-  const handleClick = (): void => {
-    showMessage('success', 'Congratulations, you will be redirected in 5 seconds')
+  const checkout = (): void => {
+    showMessage('success', 'Congratulations, you will be redirected in 2 seconds', 2000)
     setTimeout(() => {
       dispatch(ADD_TO_CHECKOUT(cartItems))
       history.push('/home')
-    }, 5000)
+    }, 3000)
   }
 
   return (
@@ -101,7 +101,7 @@ const Cart = (): JSX.Element => {
       <CartFooter>
         <IconContext.Provider value={{ style: { paddingLeft: '19px' } }}>
           <OutlineButton
-            onClick={handleClick}
+            onClick={checkout}
             disabled={totalCart() < 30}
             color='#27c383'
           >

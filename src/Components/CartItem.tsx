@@ -58,6 +58,9 @@ const CartItem = ({ type, price, bet, color, id }: Item): JSX.Element => {
           {bet
             .slice()
             .sort((a, b) => a - b)
+            .map(number => {
+              return number < 10 ? `0${number}` : number
+            })
             .join(', ')}
         </Paragraph>
         <Paragraph margin='5px auto' fontSize='0.9375em' fontStyle='normal'>

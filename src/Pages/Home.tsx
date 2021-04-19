@@ -160,6 +160,9 @@ const Home: React.FC = () => {
                     {bet.bet
                       .slice()
                       .sort((a, b) => a - b)
+                      .map(number => {
+                        return number < 10 ? `0${number}` : number
+                      })
                       .join(', ')}
                   </Paragraph>
                   <Paragraph

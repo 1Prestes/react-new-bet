@@ -49,12 +49,9 @@ const Login: React.FC = () => {
     setUser({ ...user, [target.name]: target.value })
   }
 
-  const handleClick = async (
-    event: React.FormEvent<HTMLButtonElement>
-  ): Promise<void> => {
+  const handleClick = (event: React.FormEvent<HTMLButtonElement>): void => {
     event.preventDefault()
-
-    await schema
+    schema
       .validate(user)
       .then(res => {
         dispatch(AUTH_USER({ login: res }))
