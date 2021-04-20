@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Route, Redirect, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { useAppSelector } from '../store/hooks'
 import Login from '../Components/Login'
 import SignUp from '../Components/Sign-Up'
 import ResetPassword from '../Components/ResetPassword'
@@ -26,11 +27,12 @@ const AuthenticationContainer = styled.div`
 `
 
 const SignIn: React.FC = () => {
-  const [isAuth, setIsAuth] = useState(Boolean)
+  const token = useAppSelector(state => state.user.token)
+  const history = useHistory()
 
   useEffect(() => {
-    setIsAuth(false)
-  }, [])
+    if (token) history.push('/')
+  }, [token])
 
   return (
     <>
@@ -48,8 +50,8 @@ const SignIn: React.FC = () => {
           <TitleXL>Lottery</TitleXL>
         </AuthenticationContainer>
 
-        {!isAuth && <Redirect to='/authentication/login' />}
-        {!isAuth && (
+        {!token && <Redirect to='/authentication/login' />}
+        {!token && (
           <Route path='/authentication/login' render={() => <Login />} />
         )}
         <Route
@@ -58,7 +60,6 @@ const SignIn: React.FC = () => {
         />
         <Route path='/authentication/sign-up' render={() => <SignUp />} />
       </Container>
-      {/* <Footer /> */}
     </>
   )
 }

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // import type { RootState } from './store'
 import { auth, createUser } from '../Services/FakeServer/server'
-import { setCookie } from '../Services/storageCookie'
+import { removeCookie, setCookie } from '../Services/storageCookie'
 
 interface User {
   user: any
@@ -38,6 +38,7 @@ const usersSlice = createSlice({
       return { ...state, user: newAuth.user, token: newAuth.token, error: '' }
     },
     LOGOUT_USER (state) {
+      removeCookie('@AUTH_TOKEN')
       return { ...state, user: {}, token: '', error: '' }
     }
   }

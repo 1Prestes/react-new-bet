@@ -1,20 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Paragraph } from './typography'
 
 const HtmlFooter = styled.footer`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
-  border-top: 2px solid #ebebeb;
-  font-size: 0.9375em;
+  margin-top: 150px;
   padding: 30px 0;
-  font-style: normal;
+  border-top: 2px solid #ebebeb;
 `
 
 function Footer (): React.ReactElement {
   return (
-    <HtmlFooter>Copyright {new Date().getFullYear()} Luby Software</HtmlFooter>
+    <HtmlFooter>
+      <Paragraph fontSize='0.9375em'>Copyright {new Date().getFullYear()} Luby Software</Paragraph>
+    </HtmlFooter>
   )
 }
 

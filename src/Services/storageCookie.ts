@@ -19,5 +19,5 @@ export const getCookie = (name: string): string => {
 
 export const removeCookie = (name: string): void => {
   if (!name) return
-  return cookie.remove(name)
+  return cookie.remove(name, defaultOptions)
 }
