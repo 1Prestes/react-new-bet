@@ -3,18 +3,19 @@ import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoCartOutline } from 'react-icons/io5'
 
-import { fetchGames } from '../Services/loadGames'
-import { useAppSelector, useAppDispatch } from '../store/hooks'
 import { ADD_BET_TO_CART, SET_CURRENT_GAME } from '../store/gamesReducer'
-import Navbar from './Navbar'
-import { OutlineButton, Button } from './buttons'
-import { Span, SubTitle, TitleXS, Paragraph } from './typography'
+import { useAppSelector, useAppDispatch } from '../store/hooks'
+import { OutlineButton, Button, Span, SubTitle, TitleXS, Paragraph } from './'
 import Cart from './Cart'
 import GameNumbers from './GameNumbers'
-import { numberExists } from '../Services/numberExists'
-import { removeNumber } from '../Services/removeNumber'
-import { generateGameNumbers } from '../Services/generateGameNumbers'
-import { showMessage } from '../Services/toast'
+import Navbar from './Navbar'
+import {
+  fetchGames,
+  numberExists,
+  removeNumber,
+  generateGameNumbers,
+  showMessage
+} from '../Services'
 
 const BetContainer = styled.main`
   display: flex;
@@ -171,21 +172,6 @@ const NewBet: React.FC = () => {
     clearGame(false)
   }
 
-  const renderNumbers = (): JSX.Element[] => {
-    return gameNumbers.map(number => {
-      let selected = false
-      if (betNumbers.includes(number)) selected = true
-      return (
-        <GameNumbers
-          key={number}
-          number={number}
-          selected={selected}
-          clicked={chooseNumber}
-        />
-      )
-    })
-  }
-
   return (
     <>
       <Navbar linkToHome={true} />
@@ -238,7 +224,21 @@ const NewBet: React.FC = () => {
             </Paragraph>
           </GameInfo>
 
-          <ChooseNumber>{renderNumbers()}</ChooseNumber>
+          <ChooseNumber>
+            {currentGame &&
+              gameNumbers.map(number => {
+                let selected = false
+                if (betNumbers.includes(number)) selected = true
+                return (
+                  <GameNumbers
+                    key={number}
+                    number={number}
+                    selected={selected}
+                    clicked={chooseNumber}
+                  />
+                )
+              })}
+          </ChooseNumber>
 
           <Actions>
             <ActionsContainer>

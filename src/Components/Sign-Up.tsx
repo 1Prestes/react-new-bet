@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 import { IconContext } from 'react-icons'
 import * as yup from 'yup'
 
-import { useAppSelector, useAppDispatch } from '../store/hooks'
-import Form, { AuthenticationFormContainer } from './Form'
-import Input from './Input'
-import { TitleSM } from './typography'
-import { OutlineButton } from './buttons'
-import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 import { REGISTER_USER } from '../store/userReducer'
-import { showMessage } from '../Services/toast'
+import { useAppSelector, useAppDispatch } from '../store/hooks'
+import Input from './Input'
+import Form, { AuthenticationFormContainer } from './Form'
+import { TitleSM, OutlineButton } from './'
+import { showMessage } from '../Services'
 
 const SignUp: React.FC = () => {
   const [newUser, setNewUser] = useState({ name: '', email: '', password: '' })

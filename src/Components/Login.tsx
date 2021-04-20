@@ -9,9 +9,8 @@ import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { AUTH_USER } from '../store/userReducer'
 import Form, { AuthenticationFormContainer } from './Form'
 import Input from './Input'
-import { TitleSM } from '../Components/typography'
-import { OutlineButton } from '../Components/buttons'
-import { showMessage } from '../Services/toast'
+import { TitleSM, OutlineButton } from '../Components/'
+import { showMessage } from '../Services/'
 
 const ForgetPasswordParagraph = styled.p`
   margin: 27px;

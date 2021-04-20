@@ -1,13 +1,10 @@
-import React from 'react'
 import styled from 'styled-components'
 import { IoTrashOutline } from 'react-icons/io5'
 
-import { OutlineButton } from './buttons'
-import { Paragraph, Span } from './typography'
-import { floatToReal } from '../Services/floatToReal'
-import { useAppDispatch } from '../store/hooks'
 import { REMOVE_BET_OF_CART } from '../store/gamesReducer'
-import { showMessage } from '../Services/toast'
+import { useAppDispatch } from '../store/hooks'
+import { OutlineButton, Paragraph, Span } from './'
+import { floatToReal, showMessage } from '../Services/'
 
 interface Item {
   type: string

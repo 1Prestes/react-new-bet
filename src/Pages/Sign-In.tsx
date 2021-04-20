@@ -5,8 +5,7 @@ import styled from 'styled-components'
 import Login from '../Components/Login'
 import SignUp from '../Components/Sign-Up'
 import ResetPassword from '../Components/ResetPassword'
-import { TitleMD, TitleXL } from '../Components/typography'
-import { Button } from '../Components/buttons'
+import { TitleMD, TitleXL, Button } from '../Components'
 
 const Container = styled.div`
   display: flex;

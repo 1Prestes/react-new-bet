@@ -6,8 +6,7 @@ import * as yup from 'yup'
 
 import Form, { AuthenticationFormContainer } from './Form'
 import Input from './Input'
-import { TitleSM } from './typography'
-import { OutlineButton } from './buttons'
+import { TitleSM, OutlineButton } from './'
 import { showMessage } from '../Services/toast'
 
 const ResetPassword: React.FC = () => {

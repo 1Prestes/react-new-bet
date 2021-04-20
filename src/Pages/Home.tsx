@@ -6,10 +6,8 @@ import { IoMdArrowForward } from 'react-icons/io'
 
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import Navbar from '../Components/Navbar'
-import { Paragraph, Span, SubTitle } from '../Components/typography'
-import { OutlineButton } from '../Components/buttons'
-import { fetchGames } from '../Services/loadGames'
-import { floatToReal } from '../Services/floatToReal'
+import { Paragraph, Span, SubTitle, OutlineButton } from '../Components/'
+import { fetchGames, floatToReal } from '../Services'
 
 interface Bet {
   id: string
@@ -105,30 +103,31 @@ const Home: React.FC = () => {
               Filters
             </Paragraph>
             <Filters>
-              {games?.map(game => {
-                let { color, type } = game
-                let backgroundColor = 'transparent'
-                const border = color
-                if (game.type === filter) {
-                  backgroundColor = color
-                  color = '#fff'
-                }
+              {games[0].type &&
+                games.map(game => {
+                  let { color, type } = game
+                  let backgroundColor = 'transparent'
+                  const border = color
+                  if (game.type === filter) {
+                    backgroundColor = color
+                    color = '#fff'
+                  }
 
-                return (
-                  <OutlineButton
-                    key={game.type}
-                    onClick={() => selectFilter(game.type)}
-                    data-current-game={game.type}
-                    fontSize='0.875em'
-                    color={color}
-                    backgroundColor={backgroundColor}
-                    border={`2px solid ${border}`}
-                    margin='auto 10px'
-                  >
-                    {type}
-                  </OutlineButton>
-                )
-              })}
+                  return (
+                    <OutlineButton
+                      key={game.type}
+                      onClick={() => selectFilter(game.type)}
+                      data-current-game={game.type}
+                      fontSize='0.875em'
+                      color={color}
+                      backgroundColor={backgroundColor}
+                      border={`2px solid ${border}`}
+                      margin='auto 10px'
+                    >
+                      {type}
+                    </OutlineButton>
+                  )
+                })}
             </Filters>
           </FilterContainer>
 

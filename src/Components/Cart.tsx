@@ -4,13 +4,11 @@ import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
-import { Span, TitleXS } from './typography'
-import { OutlineButton } from './buttons'
-import CartItem from './CartItem'
-import { floatToReal } from '../Services/floatToReal'
-import { useAppSelector, useAppDispatch } from '../store/hooks'
 import { ADD_TO_CHECKOUT } from '../store/gamesReducer'
-import { showMessage } from '../Services/toast'
+import { useAppSelector, useAppDispatch } from '../store/hooks'
+import CartItem from './CartItem'
+import { Span, TitleXS, OutlineButton } from './'
+import { floatToReal, showMessage } from '../Services/'
 
 interface CurrentValue {
   price: number
