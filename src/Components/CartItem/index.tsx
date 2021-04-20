@@ -1,10 +1,10 @@
-import styled from 'styled-components'
 import { IoTrashOutline } from 'react-icons/io5'
 
-import { REMOVE_BET_OF_CART } from '../store/gamesReducer'
-import { useAppDispatch } from '../store/hooks'
-import { OutlineButton, Paragraph, Span } from './'
-import { floatToReal, showMessage } from '../Services/'
+import { REMOVE_BET_OF_CART } from '../../store/gamesReducer'
+import { useAppDispatch } from '../../store/hooks'
+import { OutlineButton, Paragraph, Span } from '../'
+import { floatToReal, showMessage } from '../../Helpers'
+import { CartItemInfo, HtmlCartItem } from './CartItem'
 
 interface Item {
   type: string
@@ -13,25 +13,6 @@ interface Item {
   color: string
   id: string
 }
-
-interface CartInfo {
-  borderColor: string
-}
-
-const HtmlCartItem = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 20px 0;
-`
-
-const CartItemInfo = styled.div<CartInfo>`
-  margin-left: 10px;
-  padding: 5px 12px;
-  max-width: 210px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  border-left: 4px solid ${props => props.borderColor};
-`
 
 const CartItem = ({ type, price, bet, color, id }: Item): JSX.Element => {
   const dispatch = useAppDispatch()

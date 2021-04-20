@@ -12,7 +12,7 @@ export const fetchGames = createAsyncThunk(
       return await response.json()
     }).then(games => {
       return games
-    })
+    }).catch(err => err)
     return response
   }
 )

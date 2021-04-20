@@ -4,10 +4,11 @@ import { IconContext } from 'react-icons'
 import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 import * as yup from 'yup'
 
-import Form, { AuthenticationFormContainer } from './Form'
-import Input from './Input'
-import { TitleSM, OutlineButton } from './'
-import { showMessage } from '../Services/toast'
+import Form from '../../Components/Form'
+import { AuthenticationFormContainer } from '../../Components/Form/Form'
+import Input from '../../Components/Input'
+import { TitleSM, OutlineButton } from '../../Components'
+import { showMessage } from '../../Helpers/toast'
 
 const ResetPassword: React.FC = () => {
   const [email, setEmail] = useState({ email: '' })

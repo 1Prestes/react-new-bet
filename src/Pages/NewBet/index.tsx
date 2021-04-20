@@ -1,92 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoCartOutline } from 'react-icons/io5'
 
-import { ADD_BET_TO_CART, SET_CURRENT_GAME } from '../store/gamesReducer'
-import { useAppSelector, useAppDispatch } from '../store/hooks'
-import { OutlineButton, Button, Span, SubTitle, TitleXS, Paragraph } from './'
-import Cart from './Cart'
-import GameNumbers from './GameNumbers'
-import Navbar from './Navbar'
+import { ADD_BET_TO_CART, SET_CURRENT_GAME } from '../../store/gamesReducer'
+import { useAppSelector, useAppDispatch } from '../../store/hooks'
+import { OutlineButton, Button, Span, SubTitle, TitleXS, Paragraph } from '../../Components'
+import Cart from '../../Components/Cart'
+import GameNumbers from '../../Components/GameNumbers'
+import Navbar from '../../Components/NavBar'
 import {
   fetchGames,
   numberExists,
   removeNumber,
   generateGameNumbers,
   showMessage
-} from '../Services'
-
-const BetContainer = styled.main`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: baseline;
-  margin: 130px auto;
-  max-width: 1440px;
-  padding: 0 10px;
-
-  @media (min-width: 678px) {
-    margin: 75px auto;
-  }
-`
-
-const BetGuide = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  @media (min-width: 576px) {
-    display: block;
-    max-width: 750px;
-    padding: 0 10px;
-  }
-`
-
-const GameInfo = styled.div`
-  margin-top: 35px;
-  max-width: 648px;
-  padding: 0 20px;
-
-  @media (min-width: 576px) {
-    padding: inherit;
-  }
-`
-
-const GamesContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
-
-const ChooseNumber = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 30px 0 40px 0;
-
-  @media (min-width: 576px) {
-    justify-content: flex-start;
-  }
-`
-
-const Actions = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin: 25px 0;
-`
-
-const ActionsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-
-  @media (min-width: 678px) {
-    width: inherit;
-  }
-`
+} from '../../Helpers'
+import {
+  Actions,
+  ActionsContainer,
+  BetContainer,
+  BetGuide,
+  ChooseNumber,
+  GameInfo,
+  GamesContainer
+} from './NewBet'
 
 const NewBet: React.FC = () => {
   const [gameNumbers, setGameNumbers] = useState<number[]>([])

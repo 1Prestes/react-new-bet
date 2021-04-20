@@ -1,32 +1,14 @@
 import React, { useEffect } from 'react'
 import { Route, Redirect, useHistory } from 'react-router-dom'
-import styled from 'styled-components'
 
-import { useAppSelector } from '../store/hooks'
-import Login from '../Components/Login'
-import SignUp from '../Components/Sign-Up'
-import ResetPassword from '../Components/ResetPassword'
-import { TitleMD, TitleXL, Button } from '../Components'
+import { useAppSelector } from '../../store/hooks'
+import Login from '../SignIn'
+import SignUp from '../SignUp'
+import ResetPassword from '../ResetPassword'
+import { TitleMD, TitleXL, Button } from '../../Components'
+import { Container, AuthenticationContainer } from './Authentication'
 
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  height: 100vh;
-
-  @media (max-width: 699px) {
-    margin-top: 100px;
-  }
-`
-
-const AuthenticationContainer = styled.div`
-  text-align: center;
-  width: min-content;
-  margin: auto 20px;
-`
-
-const SignIn: React.FC = () => {
+const Authentication: React.FC = () => {
   const token = useAppSelector(state => state.user.token)
   const history = useHistory()
 
@@ -64,4 +46,4 @@ const SignIn: React.FC = () => {
   )
 }
 
-export default SignIn
+export default Authentication

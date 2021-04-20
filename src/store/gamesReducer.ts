@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { fetchGames } from '../Services/loadGames'
+import { fetchGames } from '../Helpers/loadGames'
 
 import type { RootState } from './store'
 

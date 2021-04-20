@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
 import { Link, useHistory } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 import * as yup from 'yup'
 
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { AUTH_USER } from '../store/userReducer'
-import Form, { AuthenticationFormContainer } from './Form'
-import Input from './Input'
-import { TitleSM, OutlineButton } from '../Components/'
-import { showMessage } from '../Services/'
-
-const ForgetPasswordParagraph = styled.p`
-  margin: 27px;
-  font-size: 1.0625em;
-  text-align: end;
-  a {
-    color: #c1c1c1;
-  }
-`
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { AUTH_USER } from '../../store/userReducer'
+import Form from '../../Components/Form/'
+import { AuthenticationFormContainer } from '../../Components/Form/Form'
+import Input from '../../Components/Input'
+import { TitleSM, OutlineButton } from '../../Components'
+import { showMessage } from '../../Helpers'
+import { ForgetPasswordParagraph } from './SignIn'
 
 const Login: React.FC = () => {
   const [user, setUser] = useState({ email: '', password: '' })

@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import Navbar from '../Components/Navbar'
-import { Paragraph, Span, SubTitle, OutlineButton } from '../Components/'
-import { fetchGames, floatToReal } from '../Services'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import Navbar from '../../Components/NavBar'
+import { Paragraph, Span, SubTitle, OutlineButton } from '../../Components/'
+import { fetchGames, floatToReal } from '../../Helpers'
+import {
+  Container,
+  Actions,
+  FilterContainer,
+  Filters,
+  Games,
+  Game,
+  BorderLeft
+} from './Home'
 
 interface Bet {
   id: string
@@ -18,55 +26,6 @@ interface Bet {
   price: number
   date: string
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  max-width: 1440px;
-  margin: 130px auto;
-  padding: 0 10%;
-
-  @media (min-width: 678px) {
-    margin: 80px auto;
-  }
-`
-
-const Actions = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-`
-
-const FilterContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-`
-
-const Filters = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
-
-const Games = styled.main`
-  margin-top: 35px;
-`
-
-const Game = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin: 30px auto;
-`
-
-const BorderLeft = styled.div`
-  background: ${props => props.color ?? 'red'};
-  margin-right: 15px;
-  height: 94px;
-  width: 6px;
-  border-radius: 100px;
-`
 
 const Home: React.FC = () => {
   const [filter, setFilter] = useState<string>()

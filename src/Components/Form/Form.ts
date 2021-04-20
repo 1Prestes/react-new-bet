@@ -1,10 +1,4 @@
-import React from 'react'
-
 import styled from 'styled-components'
-
-interface IChildren {
-  children: React.ReactNode
-}
 
 export const AuthenticationFormContainer = styled.div`
   display: flex;
@@ -19,7 +13,7 @@ export const AuthenticationFormContainer = styled.div`
   }
 `
 
-const HtmlForm = styled.form`
+export const HtmlForm = styled.form`
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -33,9 +27,3 @@ const HtmlForm = styled.form`
     width: 100%;
   }
 `
-
-const Form: React.FC<IChildren> = ({ children }) => (
-  <HtmlForm>{children}</HtmlForm>
-)
-
-export default Form

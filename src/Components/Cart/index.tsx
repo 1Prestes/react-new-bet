@@ -1,14 +1,13 @@
-import React from 'react'
 import { useHistory } from 'react-router-dom'
-import styled from 'styled-components'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
-import { ADD_TO_CHECKOUT } from '../store/gamesReducer'
-import { useAppSelector, useAppDispatch } from '../store/hooks'
-import CartItem from './CartItem'
-import { Span, TitleXS, OutlineButton } from './'
-import { floatToReal, showMessage } from '../Services/'
+import { ADD_TO_CHECKOUT } from '../../store/gamesReducer'
+import { useAppSelector, useAppDispatch } from '../../store/hooks'
+import CartItem from '../CartItem'
+import { Span, TitleXS, OutlineButton } from '../'
+import { floatToReal, showMessage } from '../../Helpers'
+import { HtmlCart, CartBody, CartContainer, CartFooter } from './Cart'
 
 interface CurrentValue {
   price: number
@@ -22,30 +21,6 @@ interface ICartItem {
   color: string
   id: string
 }
-
-const HtmlCart = styled.div`
-  border: 1px solid #e2e2e2;
-  border-radius: 10px;
-  width: 317px;
-`
-
-const CartContainer = styled.div`
-  padding: 32px 17px;
-`
-
-const CartBody = styled.div`
-  max-height: 335px;
-  overflow: auto;
-  margin-bottom: 15px;
-`
-
-const CartFooter = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #e2e2e2;
-  height: 96px;
-`
 
 const Cart = (): JSX.Element => {
   const cartItems = useAppSelector(state => state.games.cart)

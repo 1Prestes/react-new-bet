@@ -4,12 +4,13 @@ import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 import { IconContext } from 'react-icons'
 import * as yup from 'yup'
 
-import { REGISTER_USER } from '../store/userReducer'
-import { useAppSelector, useAppDispatch } from '../store/hooks'
-import Input from './Input'
-import Form, { AuthenticationFormContainer } from './Form'
-import { TitleSM, OutlineButton } from './'
-import { showMessage } from '../Services'
+import { REGISTER_USER } from '../../store/userReducer'
+import { useAppSelector, useAppDispatch } from '../../store/hooks'
+import Input from '../../Components/Input'
+import Form from '../../Components/Form/'
+import { AuthenticationFormContainer } from '../../Components/Form/Form'
+import { TitleSM, OutlineButton } from '../../Components'
+import { showMessage } from '../../Helpers'
 
 const SignUp: React.FC = () => {
   const [newUser, setNewUser] = useState({ name: '', email: '', password: '' })

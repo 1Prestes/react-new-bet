@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 // import type { RootState } from './store'
-import { auth, createUser } from '../Services/FakeServer/server'
-import { removeCookie, setCookie } from '../Services/storageCookie'
+import { auth, createUser } from '../Helpers/FakeServer/server'
+import { removeCookie, setCookie } from '../Helpers/storageCookie'
 
 interface User {
   user: any

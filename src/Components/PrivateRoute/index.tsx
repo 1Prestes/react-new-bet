@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Redirect, RouteComponentProps } from 'react-router-dom'
-import { useAppSelector } from '../store/hooks'
+import { useAppSelector } from '../../store/hooks'
 
 interface Props {
   Component: React.FC<RouteComponentProps>

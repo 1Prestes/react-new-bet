@@ -1,27 +1,16 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { IconContext } from 'react-icons'
-import { IoMdArrowForward } from 'react-icons/io'
-
-import { useAppDispatch } from '../store/hooks'
-import { LOGOUT_USER } from '../store/userReducer'
-
-interface LinkToHome {
-  linkToHome?: boolean
-}
 
 interface Menu {
   isOpen?: boolean
 }
 
-const Header = styled.header`
+export const Header = styled.header`
   @media (min-width: 678px) {
     border-bottom: 2px solid #ebebeb;
   }
 `
 
-const HtmlNavbar = styled.nav<Menu>`
+export const HtmlNavbar = styled.nav<Menu>`
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -69,7 +58,7 @@ const HtmlNavbar = styled.nav<Menu>`
   }
 `
 
-const MenuContainer = styled.div`
+export const MenuContainer = styled.div`
   width: 100%;
   padding-top: 15px;
   padding-left: 30px;
@@ -83,7 +72,7 @@ const MenuContainer = styled.div`
   }
 `
 
-const MenuItemsContainer = styled.div`
+export const MenuItemsContainer = styled.div`
   width: 100%;
 
   ul {
@@ -123,7 +112,7 @@ const MenuItemsContainer = styled.div`
   }
 `
 
-const Logo = styled.div`
+export const Logo = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -146,60 +135,10 @@ const Logo = styled.div`
   }
 `
 
-const NavItem = styled.li`
+export const NavItem = styled.li`
   a {
     display: inline-flex;
     margin: 0 40px;
     color: var(--text-color-primary);
   }
 `
-
-const Navbar = ({ linkToHome }: LinkToHome): JSX.Element => {
-  const [isOpen, setIsOpen] = useState(false)
-  const dispatch = useAppDispatch()
-  const logout = (): void => {
-    dispatch(LOGOUT_USER())
-  }
-
-  const handleClick = (): void => {
-    setIsOpen(!isOpen)
-  }
-
-  return (
-    <Header>
-      <HtmlNavbar isOpen={isOpen}>
-        <MenuContainer>
-          <Logo onClick={handleClick}>
-            <h1>TGL</h1>
-            <hr />
-          </Logo>
-        </MenuContainer>
-        <MenuItemsContainer>
-          <ul>
-            <div>
-              {linkToHome && (
-                <NavItem>
-                  <Link to='/'>Home</Link>
-                </NavItem>
-              )}
-            </div>
-            <div>
-              <NavItem>
-                <Link to='/'>Account</Link>
-              </NavItem>
-              <IconContext.Provider value={{ style: { paddingLeft: '20px' } }}>
-                <NavItem onClick={logout}>
-                  <Link to='/'>
-                    Log out <IoMdArrowForward />
-                  </Link>
-                </NavItem>
-              </IconContext.Provider>
-            </div>
-          </ul>
-        </MenuItemsContainer>
-      </HtmlNavbar>
-    </Header>
-  )
-}
-
-export default Navbar
