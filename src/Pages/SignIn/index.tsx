@@ -5,24 +5,27 @@ import { IoMdArrowForward } from 'react-icons/io'
 import * as yup from 'yup'
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { AUTH_USER } from '../../store/userReducer'
+// import { AUTH_USER } from '../../store/userReducer'
 import Form from '../../Components/Form/'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
 import Input from '../../Components/Input'
 import { TitleSM, OutlineButton } from '../../Components'
 import { showMessage } from '../../Helpers'
 import { ForgetPasswordParagraph } from './SignIn'
+import { setAuth } from '../../store/sessionReducer'
 
 const Login: React.FC = () => {
   const [user, setUser] = useState({ email: '', password: '' })
   const currentUser = useAppSelector(state => state.user)
+  const session = useAppSelector(state => state.session)
   const history = useHistory()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (currentUser.token) history.push('/')
-    if (currentUser.error) showMessage('error', currentUser.error)
-  }, [currentUser])
+    if (session.error) showMessage('error', session.error)
+    console.log(session)
+  }, [session])
 
   const schema = yup.object().shape({
     password: yup
@@ -44,8 +47,8 @@ const Login: React.FC = () => {
     event.preventDefault()
     schema
       .validate(user)
-      .then(res => {
-        dispatch(AUTH_USER({ login: res }))
+      .then((res: any) => {
+        dispatch(setAuth(res))
       })
       .catch(err => showMessage('error', err.errors[0]))
   }
