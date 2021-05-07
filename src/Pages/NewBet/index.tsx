@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import jwt from 'jsonwebtoken'
 import { IconContext } from 'react-icons'
 import { IoCartOutline } from 'react-icons/io5'
 
@@ -38,7 +39,6 @@ import {
 const NewBet: React.FC = () => {
   const [gameNumbers, setGameNumbers] = useState<number[]>([])
   const [betNumbers, setBetNumbers] = useState<number[]>([])
-  const user = useAppSelector(state => state.user.user)
   const token = useAppSelector(state => state.session.token)
   const games = useAppSelector(state => state.games.games)
   const currentGame = useAppSelector(state => state.games.currentGame)
@@ -97,6 +97,8 @@ const NewBet: React.FC = () => {
   }
 
   const addToCart = (): void => {
+    const { uid }: any = jwt.decode(token)
+
     if (betNumbers.length < currentGame.max_number) {
       const missingNumbers = currentGame.max_number - betNumbers.length
       showMessage(
@@ -107,7 +109,7 @@ const NewBet: React.FC = () => {
     }
     const bet = {
       id: btoa(String(Date.now())),
-      userId: user.id,
+      userId: uid,
       bet: betNumbers,
       kindOfGame: currentGame.type,
       color: currentGame.color,

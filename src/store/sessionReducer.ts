@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { setCookie } from '../Helpers'
 
+import { setCookie } from '../Helpers'
 import api from '../Utils/axios-http-client'
 
 interface Login {
@@ -30,7 +30,7 @@ const sessionSlice = createSlice({
     })
 
     builder.addCase(setAuth.rejected, (state, action) => {
-      let error: any = action.error.message
+      let error = ''
       if (action.error.message === 'Request failed with status code 401') {
         error = 'incorrect data'
       }

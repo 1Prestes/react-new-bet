@@ -4,8 +4,10 @@ import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 import { IconContext } from 'react-icons'
 import * as yup from 'yup'
 
-import { REGISTER_USER } from '../../store/userReducer'
+// import { REGISTER_USER } from '../../store/userReducer'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
+import { createUser } from '../../store/userReducer'
+import { setAuth } from '../../store/sessionReducer'
 import Input from '../../Components/Input'
 import Form from '../../Components/Form/'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
@@ -13,13 +15,18 @@ import { TitleSM, OutlineButton } from '../../Components'
 import { showMessage } from '../../Helpers'
 
 const SignUp: React.FC = () => {
-  const [newUser, setNewUser] = useState({ name: '', email: '', password: '' })
+  const [newUser, setNewUser] = useState({
+    username: '',
+    email: '',
+    password: ''
+  })
+  const token = useAppSelector(state => state.session.token)
   const currentUser = useAppSelector(state => state.user)
   const dispatch = useAppDispatch()
   const history = useHistory()
 
   useEffect(() => {
-    if (currentUser.token) history.push('/')
+    if (token) history.push('/')
     if (currentUser.error) showMessage('error', currentUser.error)
   }, [currentUser])
 
@@ -32,7 +39,7 @@ const SignUp: React.FC = () => {
       .string()
       .email()
       .required(),
-    name: yup
+    username: yup
       .string()
       .min(3)
       .required('')
@@ -45,7 +52,12 @@ const SignUp: React.FC = () => {
 
     await schema
       .validate(newUser)
-      .then(res => dispatch(REGISTER_USER(res)))
+      .then(res => {
+        dispatch(createUser(res)).then(() => {
+          const { email, password } = res
+          dispatch(setAuth({ email, password }))
+        })
+      })
       .catch(err => showMessage('error', err.errors[0]))
   }
 
@@ -63,9 +75,9 @@ const SignUp: React.FC = () => {
           <Input
             changed={event => handleChange(event)}
             type='text'
-            placeholder='Name'
-            name='name'
-            value={newUser.name}
+            placeholder='Username'
+            name='username'
+            value={newUser.username}
           />
           <Input
             changed={event => handleChange(event)}
