@@ -27,8 +27,8 @@ const initialState = {
     {
       color: '',
       description: '',
-      'max-number': 0,
-      'min-cart-value': 0,
+      max_number: 0,
+      min_cart_value: 0,
       price: 0,
       range: 0,
       type: ''
@@ -37,8 +37,8 @@ const initialState = {
   currentGame: {
     color: '',
     description: '',
-    'max-number': 0,
-    'min-cart-value': 0,
+    max_number: 0,
+    min_cart_value: 0,
     price: 0,
     range: 0,
     type: ''
@@ -69,14 +69,11 @@ const gamesSlice = createSlice({
   },
   extraReducers: build => {
     build.addCase(fetchGames.fulfilled, (state, action) => {
-      console.log(action)
       return { ...state, games: action.payload.data }
     })
 
     build.addCase(fetchGames.rejected, (state, action) => {
-      console.log(action)
       return state
-      // return { ...state, games: action.payload }
     })
   }
 })

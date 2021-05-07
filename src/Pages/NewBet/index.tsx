@@ -2,14 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { IconContext } from 'react-icons'
 import { IoCartOutline } from 'react-icons/io5'
 
-import { ADD_BET_TO_CART, SET_CURRENT_GAME } from '../../store/gamesReducer'
+import {
+  ADD_BET_TO_CART,
+  fetchGames,
+  SET_CURRENT_GAME
+} from '../../store/gamesReducer'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
-import { OutlineButton, Button, Span, SubTitle, TitleXS, Paragraph } from '../../Components'
+import {
+  OutlineButton,
+  Button,
+  Span,
+  SubTitle,
+  TitleXS,
+  Paragraph
+} from '../../Components'
 import Cart from '../../Components/Cart'
 import GameNumbers from '../../Components/GameNumbers'
 import Navbar from '../../Components/NavBar'
 import {
-  fetchGames,
   numberExists,
   removeNumber,
   generateGameNumbers,
@@ -29,13 +39,13 @@ const NewBet: React.FC = () => {
   const [gameNumbers, setGameNumbers] = useState<number[]>([])
   const [betNumbers, setBetNumbers] = useState<number[]>([])
   const user = useAppSelector(state => state.user.user)
+  const token = useAppSelector(state => state.session.token)
   const games = useAppSelector(state => state.games.games)
   const currentGame = useAppSelector(state => state.games.currentGame)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    dispatch(fetchGames())
+    dispatch(fetchGames(token))
   }, [])
 
   useEffect(() => {
@@ -66,12 +76,12 @@ const NewBet: React.FC = () => {
       return setBetNumbers(arr)
     }
 
-    if (betNumbers.length >= currentGame['max-number']) return
+    if (betNumbers.length >= currentGame.max_number) return
     setBetNumbers([...betNumbers, numberSelected])
   }
 
   const completeGame = (): void => {
-    const amount = currentGame['max-number'] - betNumbers.length
+    const amount = currentGame.max_number - betNumbers.length
     const range = currentGame.range
     const completedNumbers = generateGameNumbers(amount, range, betNumbers)
     setBetNumbers([...betNumbers, ...completedNumbers])
@@ -87,8 +97,8 @@ const NewBet: React.FC = () => {
   }
 
   const addToCart = (): void => {
-    if (betNumbers.length < currentGame['max-number']) {
-      const missingNumbers = currentGame['max-number'] - betNumbers.length
+    if (betNumbers.length < currentGame.max_number) {
+      const missingNumbers = currentGame.max_number - betNumbers.length
       showMessage(
         'error',
         `Select more ${missingNumbers} numbers to complete your bet`

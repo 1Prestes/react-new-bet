@@ -4,6 +4,7 @@ import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { fetchGames } from '../../store/gamesReducer'
 import Navbar from '../../Components/NavBar'
 import { Paragraph, Span, SubTitle, OutlineButton } from '../../Components/'
 import { floatToReal } from '../../Helpers'
@@ -16,7 +17,6 @@ import {
   Game,
   BorderLeft
 } from './Home'
-import { fetchGames } from '../../store/gamesReducer'
 
 interface Bet {
   id: string
@@ -37,7 +37,6 @@ const Home: React.FC = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(fetchGames(token))
     setGamesFilter(betCheckout)
   }, [])
