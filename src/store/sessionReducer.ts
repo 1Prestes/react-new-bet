@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { setCookie } from '../Helpers'
+import { removeCookie, setCookie } from '../Helpers'
 import api from '../Utils/axios-http-client'
 
 interface Login {
@@ -22,7 +22,12 @@ const sessionSlice = createSlice({
     error: '',
     token: ''
   },
-  reducers: {},
+  reducers: {
+    LOGOUT_USER (state) {
+      removeCookie('@AUTH_TOKEN')
+      return { ...state, token: '' }
+    }
+  },
   extraReducers: builder => {
     builder.addCase(setAuth.fulfilled, (state, action) => {
       setCookie('@AUTH_TOKEN', action.payload.data.token)
@@ -40,4 +45,5 @@ const sessionSlice = createSlice({
   }
 })
 
+export const { LOGOUT_USER } = sessionSlice.actions
 export default sessionSlice.reducer
