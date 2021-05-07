@@ -6,7 +6,7 @@ import { IoMdArrowForward } from 'react-icons/io'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import Navbar from '../../Components/NavBar'
 import { Paragraph, Span, SubTitle, OutlineButton } from '../../Components/'
-import { fetchGames, floatToReal } from '../../Helpers'
+import { floatToReal } from '../../Helpers'
 import {
   Container,
   Actions,
@@ -16,6 +16,7 @@ import {
   Game,
   BorderLeft
 } from './Home'
+import { fetchGames } from '../../store/gamesReducer'
 
 interface Bet {
   id: string
@@ -31,12 +32,13 @@ const Home: React.FC = () => {
   const [filter, setFilter] = useState<string>()
   const [gamesFilter, setGamesFilter] = useState<Bet[]>([])
   const games = useAppSelector(state => state.games.games)
+  const token = useAppSelector(state => state.session.token)
   const betCheckout: Bet[] = useAppSelector(state => state.games.checkout)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    dispatch(fetchGames())
+    dispatch(fetchGames(token))
     setGamesFilter(betCheckout)
   }, [])
 

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { setCookie } from '../Helpers'
 
-import axios from '../Utils/axios-http-client'
+import api from '../Utils/axios-http-client'
 
 interface Login {
   email: string
@@ -10,7 +11,7 @@ interface Login {
 export const setAuth = createAsyncThunk(
   'user/setAuth',
   async (login: Login) => {
-    const response = await axios.post('/sessions', login).then(res => res)
+    const response = await api.post('/sessions', login).then(res => res)
     return response
   }
 )
@@ -24,6 +25,7 @@ const sessionSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(setAuth.fulfilled, (state, action) => {
+      setCookie('@AUTH_TOKEN', action.payload.data.token)
       return { ...state, token: action.payload.data.token, error: '' }
     })
 

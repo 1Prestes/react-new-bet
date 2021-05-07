@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
-import { useAppDispatch } from '../../store/hooks'
-import { LOGOUT_USER } from '../../store/userReducer'
+// import { useAppDispatch } from '../../store/hooks'
+// import { LOGOUT_USER } from '../../store/userReducer'
 import {
   Header,
   HtmlNavbar,
@@ -20,10 +20,10 @@ interface LinkToHome {
 
 const Navbar = ({ linkToHome }: LinkToHome): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false)
-  const dispatch = useAppDispatch()
-  const logout = (): void => {
-    dispatch(LOGOUT_USER())
-  }
+  // const dispatch = useAppDispatch()
+  // const logout = (): void => {
+  //   dispatch(LOGOUT_USER())
+  // }
 
   const handleClick = (): void => {
     setIsOpen(!isOpen)
@@ -52,7 +52,7 @@ const Navbar = ({ linkToHome }: LinkToHome): JSX.Element => {
                 <Link to='/'>Account</Link>
               </NavItem>
               <IconContext.Provider value={{ style: { paddingLeft: '20px' } }}>
-                <NavItem onClick={logout}>
+                <NavItem>
                   <Link to='/'>
                     Log out <IoMdArrowForward />
                   </Link>

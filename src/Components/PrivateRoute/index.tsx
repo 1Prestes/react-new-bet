@@ -14,7 +14,7 @@ const PrivateRoute = ({
   exact = false,
   ...rest
 }: Props): JSX.Element => {
-  const auth = useAppSelector(state => state.user.token)
+  const auth = useAppSelector(state => state.session.token)
 
   return (
     <Route

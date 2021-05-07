@@ -9,7 +9,7 @@ import { TitleMD, TitleXL, Button } from '../../Components'
 import { Container, AuthenticationContainer } from './Authentication'
 
 const Authentication: React.FC = () => {
-  const token = useAppSelector(state => state.user.token)
+  const token = useAppSelector(state => state.session.token)
   const history = useHistory()
 
   useEffect(() => {

@@ -16,15 +16,14 @@ import { setAuth } from '../../store/sessionReducer'
 
 const Login: React.FC = () => {
   const [user, setUser] = useState({ email: '', password: '' })
-  const currentUser = useAppSelector(state => state.user)
+  // const currentUser = useAppSelector(state => state.user)
   const session = useAppSelector(state => state.session)
   const history = useHistory()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (currentUser.token) history.push('/')
+    if (session.token) history.push('/')
     if (session.error) showMessage('error', session.error)
-    console.log(session)
   }, [session])
 
   const schema = yup.object().shape({
