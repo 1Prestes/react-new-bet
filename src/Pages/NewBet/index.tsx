@@ -84,7 +84,7 @@ const NewBet: React.FC = () => {
     const amount = currentGame.max_number - betNumbers.length
     const range = currentGame.range
     const completedNumbers = generateGameNumbers(amount, range, betNumbers)
-    setBetNumbers(completedNumbers)
+    setBetNumbers([...completedNumbers])
   }
 
   const clearGame = (clicked: boolean): void => {
