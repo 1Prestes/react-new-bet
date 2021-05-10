@@ -18,14 +18,8 @@ interface Checkout {
   token: string
   games: [
     {
-      id: string
       game_id: number
-      userId: string
       bet: number[]
-      kindOfGame: string
-      color: string
-      price: number
-      date: string
     }
   ]
 }
@@ -47,7 +41,15 @@ export const checkoutGames = createAsyncThunk(
 
     api.defaults.headers.authorization = `Bearer ${token}`
     const response = await api.post('/users/purchases', bet).then(res => res)
-    console.log(bet)
+    return response
+  }
+)
+
+export const fetchBets = createAsyncThunk(
+  'games/fetchBets',
+  async (token: string) => {
+    api.defaults.headers.authorization = `Bearer ${token}`
+    const response = await api.get('/users/purchases').then(res => res)
     return response
   }
 )
@@ -55,6 +57,7 @@ export const checkoutGames = createAsyncThunk(
 const initialState = {
   games: [
     {
+      id: 0,
       color: '',
       description: '',
       max_number: 0,
@@ -108,11 +111,19 @@ const gamesSlice = createSlice({
     })
 
     build.addCase(checkoutGames.fulfilled, (state, action) => {
+      return { ...state, cart: [] }
+    })
+
+    build.addCase(checkoutGames.rejected, (state, action) => {
       console.log(action)
       return state
     })
 
-    build.addCase(checkoutGames.rejected, (state, action) => {
+    build.addCase(fetchBets.fulfilled, (state, action) => {
+      return { ...state, checkout: action.payload.data }
+    })
+
+    build.addCase(fetchBets.rejected, (state, action) => {
       console.log(action)
       return state
     })

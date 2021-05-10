@@ -4,7 +4,7 @@ import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { fetchGames } from '../../store/gamesReducer'
+import { fetchBets, fetchGames } from '../../store/gamesReducer'
 import Navbar from '../../Components/NavBar'
 import { Paragraph, Span, SubTitle, OutlineButton } from '../../Components/'
 import { floatToReal } from '../../Helpers'
@@ -20,16 +20,16 @@ import {
 
 interface Bet {
   id: string
+  game_id: number
   userId: string
-  bet: number[]
-  kindOfGame: string
+  betnumbers: string
   color: string
   price: number
-  date: string
+  created_at: string
 }
 
 const Home: React.FC = () => {
-  const [filter, setFilter] = useState<string>()
+  const [filter, setFilter] = useState<number>()
   const [gamesFilter, setGamesFilter] = useState<Bet[]>([])
   const games = useAppSelector(state => state.games.games)
   const token = useAppSelector(state => state.session.token)
@@ -38,12 +38,17 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchGames(token))
+    dispatch(fetchBets(token))
     setGamesFilter(betCheckout)
   }, [])
 
-  const selectFilter = (filter: string): void => {
+  useEffect(() => {
+    setGamesFilter(betCheckout)
+  }, [betCheckout])
+
+  const selectFilter = (filter: number): void => {
     const currentBetsFilter = betCheckout.filter(
-      game => game.kindOfGame === filter
+      game => game.game_id === filter
     )
     setFilter(filter)
     setGamesFilter(currentBetsFilter)
@@ -68,7 +73,7 @@ const Home: React.FC = () => {
                   let { color, type } = game
                   let backgroundColor = 'transparent'
                   const border = color
-                  if (game.type === filter) {
+                  if (game.id === filter) {
                     backgroundColor = color
                     color = '#fff'
                   }
@@ -76,7 +81,7 @@ const Home: React.FC = () => {
                   return (
                     <OutlineButton
                       key={game.type}
-                      onClick={() => selectFilter(game.type)}
+                      onClick={() => selectFilter(game.id)}
                       data-current-game={game.type}
                       fontSize='0.875em'
                       color={color}
@@ -124,10 +129,14 @@ const Home: React.FC = () => {
           {gamesFilter?.map((bet: Bet) => {
             return (
               <Game key={bet.id}>
-                <BorderLeft color={bet.color} />
+                <BorderLeft
+                  color={games.filter(game => game.id === bet.game_id)[0].color}
+                />
                 <div>
                   <Paragraph fontSize='1.25em' color='#868686'>
-                    {bet.bet
+                    {bet.betnumbers
+                      .split(',')
+                      .map(number => Number(number))
                       .slice()
                       .sort((a, b) => a - b)
                       .map(number => {
@@ -141,11 +150,16 @@ const Home: React.FC = () => {
                     color='#868686'
                     fontWeight='normal'
                   >
-                    {new Date(bet.date).toLocaleDateString('pt-br')} - (R${' '}
+                    {new Date(bet.created_at).toLocaleDateString('pt-br')} - (R${' '}
                     {floatToReal(bet.price)})
                   </Paragraph>
-                  <SubTitle fontSize='1.25em' color={bet.color}>
-                    {bet.kindOfGame}
+                  <SubTitle
+                    fontSize='1.25em'
+                    color={
+                      games.filter(game => game.id === bet.game_id)[0].color
+                    }
+                  >
+                    {games.filter(game => game.id === bet.game_id)[0].type}
                   </SubTitle>
                 </div>
               </Game>

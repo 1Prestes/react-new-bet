@@ -1,4 +1,4 @@
-// import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
@@ -17,7 +17,7 @@ const Cart = (): JSX.Element => {
   const token = useAppSelector(state => state.session.token)
   const cartItems: any = useAppSelector(state => state.games.cart)
   const dispatch = useAppDispatch()
-  // const history = useHistory()
+  const history = useHistory()
 
   const totalCart = (): number => {
     return (
@@ -40,9 +40,9 @@ const Cart = (): JSX.Element => {
       'Congratulations, you will be redirected in 2 seconds',
       2000
     )
-    // setTimeout(() => {
-    // history.push('/home')
-    // }, 3000)
+    setTimeout(() => {
+      history.push('/home')
+    }, 3000)
   }
 
   return (
