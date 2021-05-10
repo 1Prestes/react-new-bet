@@ -84,7 +84,7 @@ const NewBet: React.FC = () => {
     const amount = currentGame.max_number - betNumbers.length
     const range = currentGame.range
     const completedNumbers = generateGameNumbers(amount, range, betNumbers)
-    setBetNumbers([...betNumbers, ...completedNumbers])
+    setBetNumbers(completedNumbers)
   }
 
   const clearGame = (clicked: boolean): void => {
@@ -98,7 +98,6 @@ const NewBet: React.FC = () => {
 
   const addToCart = (): void => {
     const { uid }: any = jwt.decode(token)
-
     if (betNumbers.length < currentGame.max_number) {
       const missingNumbers = currentGame.max_number - betNumbers.length
       showMessage(
@@ -109,6 +108,7 @@ const NewBet: React.FC = () => {
     }
     const bet = {
       id: btoa(String(Date.now())),
+      game_id: currentGame.id,
       userId: uid,
       bet: betNumbers,
       kindOfGame: currentGame.type,

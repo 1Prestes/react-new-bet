@@ -3,6 +3,33 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import api from '../Utils/axios-http-client'
 import { RootState } from './store'
 
+export interface ICartItem {
+  id: string
+  game_id: number
+  userId: string
+  bet: number[]
+  kindOfGame: string
+  color: string
+  price: number
+  date: string
+}
+
+interface Checkout {
+  token: string
+  games: [
+    {
+      id: string
+      game_id: number
+      userId: string
+      bet: number[]
+      kindOfGame: string
+      color: string
+      price: number
+      date: string
+    }
+  ]
+}
+
 export const fetchGames = createAsyncThunk(
   'games/fetchGames',
   async (token: string) => {
@@ -12,15 +39,18 @@ export const fetchGames = createAsyncThunk(
   }
 )
 
-interface CartItem {
-  id: string
-  userId: string
-  bet: number[]
-  kindOfGame: string
-  color: string
-  price: number
-  date: string
-}
+export const checkoutGames = createAsyncThunk(
+  'games/checkoutGames',
+  async (data: Checkout) => {
+    const { token, games } = data
+    const bet = { bet: games }
+
+    api.defaults.headers.authorization = `Bearer ${token}`
+    const response = await api.post('/users/purchases', bet).then(res => res)
+    console.log(bet)
+    return response
+  }
+)
 
 const initialState = {
   games: [
@@ -35,6 +65,7 @@ const initialState = {
     }
   ],
   currentGame: {
+    id: 0,
     color: '',
     description: '',
     max_number: 0,
@@ -59,7 +90,7 @@ const gamesSlice = createSlice({
     },
     REMOVE_BET_OF_CART (state, action) {
       const newCart = state.cart.filter(
-        (cartItem: CartItem) => cartItem.id !== action.payload
+        (cartItem: ICartItem) => cartItem.id !== action.payload
       )
       return { ...state, cart: newCart }
     },
@@ -73,6 +104,16 @@ const gamesSlice = createSlice({
     })
 
     build.addCase(fetchGames.rejected, (state, action) => {
+      return state
+    })
+
+    build.addCase(checkoutGames.fulfilled, (state, action) => {
+      console.log(action)
+      return state
+    })
+
+    build.addCase(checkoutGames.rejected, (state, action) => {
+      console.log(action)
       return state
     })
   }

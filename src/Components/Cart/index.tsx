@@ -1,8 +1,8 @@
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
-import { ADD_TO_CHECKOUT } from '../../store/gamesReducer'
+import { ICartItem, checkoutGames } from '../../store/gamesReducer'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import CartItem from '../CartItem'
 import { Span, TitleXS, OutlineButton } from '../'
@@ -13,19 +13,11 @@ interface CurrentValue {
   price: number
 }
 
-interface ICartItem {
-  key: string
-  kindOfGame: string
-  price: number
-  bet: number[]
-  color: string
-  id: string
-}
-
 const Cart = (): JSX.Element => {
-  const cartItems = useAppSelector(state => state.games.cart)
+  const token = useAppSelector(state => state.session.token)
+  const cartItems: any = useAppSelector(state => state.games.cart)
   const dispatch = useAppDispatch()
-  const history = useHistory()
+  // const history = useHistory()
 
   const totalCart = (): number => {
     return (
@@ -37,15 +29,20 @@ const Cart = (): JSX.Element => {
   }
 
   const checkout = (): void => {
+    const games = cartItems.map((item: ICartItem) => ({
+      game_id: item.game_id,
+      betnumbers: item.bet.toString()
+    }))
+
+    dispatch(checkoutGames({ token, games }))
     showMessage(
       'success',
       'Congratulations, you will be redirected in 2 seconds',
       2000
     )
-    setTimeout(() => {
-      dispatch(ADD_TO_CHECKOUT(cartItems))
-      history.push('/home')
-    }, 3000)
+    // setTimeout(() => {
+    // history.push('/home')
+    // }, 3000)
   }
 
   return (
