@@ -99,6 +99,35 @@ const gamesSlice = createSlice({
     },
     ADD_TO_CHECKOUT (state, action) {
       return { ...state, checkout: action.payload, cart: [] }
+    },
+    CLEAR_DATA (state) {
+      return {
+        ...state,
+        games: [
+          {
+            id: 0,
+            color: '',
+            description: '',
+            max_number: 0,
+            min_cart_value: 0,
+            price: 0,
+            range: 0,
+            type: ''
+          }
+        ],
+        currentGame: {
+          id: 0,
+          color: '',
+          description: '',
+          max_number: 0,
+          min_cart_value: 0,
+          price: 0,
+          range: 0,
+          type: ''
+        },
+        cart: [],
+        checkout: []
+      }
     }
   },
   extraReducers: build => {
@@ -134,7 +163,8 @@ export const {
   SET_CURRENT_GAME,
   ADD_BET_TO_CART,
   REMOVE_BET_OF_CART,
-  ADD_TO_CHECKOUT
+  ADD_TO_CHECKOUT,
+  CLEAR_DATA
 } = gamesSlice.actions
 export const user = (state: RootState): RootState => state
 export default gamesSlice.reducer

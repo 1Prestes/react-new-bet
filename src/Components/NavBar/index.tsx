@@ -13,6 +13,7 @@ import {
   MenuContainer,
   NavItem
 } from './NavBar'
+import { CLEAR_DATA } from '../../store/gamesReducer'
 
 interface LinkToHome {
   linkToHome?: boolean
@@ -22,6 +23,7 @@ const Navbar = ({ linkToHome }: LinkToHome): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false)
   const dispatch = useAppDispatch()
   const logout = (): void => {
+    dispatch(CLEAR_DATA())
     dispatch(LOGOUT_USER())
   }
 
