@@ -72,7 +72,7 @@ const Login: React.FC = () => {
             value={user.password}
           />
           <ForgetPasswordParagraph>
-            <Link to='/authentication/recover-password'>
+            <Link to='/authentication/forgot-password'>
               I forget my password
             </Link>
           </ForgetPasswordParagraph>

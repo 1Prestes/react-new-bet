@@ -139,7 +139,7 @@ const gamesSlice = createSlice({
       return state
     })
 
-    build.addCase(checkoutGames.fulfilled, (state, action) => {
+    build.addCase(checkoutGames.fulfilled, (state) => {
       return { ...state, cart: [] }
     })
 

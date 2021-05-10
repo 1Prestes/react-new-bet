@@ -34,13 +34,13 @@ const Cart = (): JSX.Element => {
       betnumbers: item.bet.toString()
     }))
 
-    dispatch(checkoutGames({ token, games }))
     showMessage(
       'success',
       'Congratulations, you will be redirected in 2 seconds',
       2000
     )
     setTimeout(() => {
+      dispatch(checkoutGames({ token, games }))
       history.push('/home')
     }, 3000)
   }

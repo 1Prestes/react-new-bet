@@ -1,64 +1,98 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { IconContext } from 'react-icons'
 import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
+import { IconContext } from 'react-icons'
 import * as yup from 'yup'
 
+// import { REGISTER_USER } from '../../store/userReducer'
+import { useAppSelector, useAppDispatch } from '../../store/hooks'
+import { createUser } from '../../store/userReducer'
+import { setAuth } from '../../store/sessionReducer'
+import Input from '../../Components/Input'
 import Form from '../../Components/Form'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
-import Input from '../../Components/Input'
 import { TitleSM, OutlineButton } from '../../Components'
-import { showMessage } from '../../Helpers/toast'
+import { showMessage } from '../../Helpers'
 
 const ResetPassword: React.FC = () => {
-  const [email, setEmail] = useState({ email: '' })
+  const [resetPassword, setResetPassword] = useState({
+    username: '',
+    email: '',
+    password: ''
+  })
+  const token = useAppSelector(state => state.session.token)
+  const currentUser = useAppSelector(state => state.user)
+  const dispatch = useAppDispatch()
   const history = useHistory()
 
+  useEffect(() => {
+    if (token) history.push('/')
+    if (currentUser.error) showMessage('error', currentUser.error)
+  }, [currentUser])
+
   const schema = yup.object().shape({
-    email: yup
+    passwordConfirmation: yup
       .string()
-      .email()
+      .oneOf([yup.ref('password'), null], 'Passwords must match'),
+    password: yup
+      .string()
+      .min(6)
       .required()
   })
 
-  const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
-    const target = event.target as HTMLInputElement
-    setEmail({ email: target.value })
-  }
-
-  const handleClick = (event: React.FormEvent<HTMLButtonElement>): void => {
+  const handleClick = async (
+    event: React.FormEvent<HTMLButtonElement>
+  ): Promise<void> => {
     event.preventDefault()
-    schema
-      .validate(email)
-      .then(() => {
-        showMessage('success', 'Success, check your inbox', 2000)
-        setTimeout(() => {
-          history.push('/authentication/login')
-        }, 2000)
+
+    await schema
+      .validate(resetPassword)
+      .then(res => {
+        dispatch(createUser(res)).then(() => {
+          const { email, password } = res
+          dispatch(setAuth({ email, password }))
+        })
       })
       .catch(err => showMessage('error', err.errors[0]))
+  }
+
+  const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
+    const target = event.target as HTMLInputElement
+    setResetPassword({ ...resetPassword, [target.name]: target.value })
   }
 
   return (
     <AuthenticationFormContainer>
       <IconContext.Provider value={{ style: { padding: '0 19px' } }}>
-        <TitleSM margin='26px auto'>Reset password</TitleSM>
+        <TitleSM margin='26px auto'>Registration</TitleSM>
+
         <Form>
           <Input
-            changed={handleChange}
-            type='email'
-            value={email.email}
-            placeholder='Email'
+            changed={event => handleChange(event)}
+            type='password'
+            placeholder='Password'
+            name='password'
+            value={resetPassword.password}
           />
+
+          <Input
+            changed={event => handleChange(event)}
+            type='password_confirmation'
+            placeholder='Password confirmation'
+            name='password'
+            value={resetPassword.password}
+          />
+
           <OutlineButton
             onClick={handleClick}
             color='#b5C401'
             fontSize='2.1875em'
             margin='17px auto'
           >
-            Send link <IoMdArrowForward />
+            Reset Password <IoMdArrowForward />
           </OutlineButton>
         </Form>
+
         <OutlineButton color='#707070' fontSize='2.1875em' margin='30px'>
           <Link to='/authentication/login'>
             <IoMdArrowBack /> Back
