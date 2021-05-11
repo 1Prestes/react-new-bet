@@ -31,6 +31,14 @@ export const createUser = createAsyncThunk(
   }
 )
 
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (data: object) => {
+    const response = await api.put('/users', data).then(res => res)
+    return response
+  }
+)
+
 const usersSlice = createSlice({
   name: 'register',
   initialState,
@@ -54,6 +62,16 @@ const usersSlice = createSlice({
     })
 
     builder.addCase(fetchUser.rejected, (state, action) => {
+      console.log(action)
+      return state
+    })
+
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      console.log(action)
+      return state
+    })
+
+    builder.addCase(updateUser.rejected, (state, action) => {
       console.log(action)
       return state
     })
