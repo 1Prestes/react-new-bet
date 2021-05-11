@@ -40,7 +40,7 @@ const Authentication: React.FC = () => {
           render={() => <ForgotPassword />}
         />
         <Route
-          path='/authentication/reset-password/:token'
+          path='/authentication/reset-password'
           render={() => <ResetPassword />}
         />
       </Container>

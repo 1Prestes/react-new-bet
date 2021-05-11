@@ -4,6 +4,8 @@ import { IconContext } from 'react-icons'
 import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 import * as yup from 'yup'
 
+import { useAppDispatch } from '../../store/hooks'
+import { forgotPassword } from '../../store/recoverPassword'
 import Form from '../../Components/Form'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
 import Input from '../../Components/Input'
@@ -12,6 +14,7 @@ import { showMessage } from '../../Helpers/toast'
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState({ email: '' })
+  const dispatch = useAppDispatch()
   const history = useHistory()
 
   const schema = yup.object().shape({
@@ -26,15 +29,34 @@ const ForgotPassword: React.FC = () => {
     setEmail({ email: target.value })
   }
 
-  const handleClick = (event: React.FormEvent<HTMLButtonElement>): void => {
+  const handleClick = async (
+    event: React.FormEvent<HTMLButtonElement>
+  ): Promise<void> => {
     event.preventDefault()
-    schema
+
+    await schema
       .validate(email)
       .then(() => {
-        showMessage('success', 'Success, check your inbox', 2000)
-        setTimeout(() => {
-          history.push('/authentication/login')
-        }, 2000)
+        const data = {
+          email: email.email,
+          redirect_url: 'http://localhost:3000/authentication/reset-password'
+        }
+        dispatch(forgotPassword(data))
+          .then(res => {
+            if (res.payload === undefined) {
+              return showMessage(
+                'error',
+                'Check the email provided and try again',
+                2000
+              )
+            }
+
+            showMessage('success', 'Success, check your inbox', 2000)
+            setTimeout(() => {
+              history.push('/authentication/login')
+            }, 2000)
+          })
+          .catch(err => console.log(err))
       })
       .catch(err => showMessage('error', err.errors[0]))
   }
