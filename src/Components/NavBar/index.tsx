@@ -51,7 +51,7 @@ const Navbar = ({ linkToHome }: LinkToHome): JSX.Element => {
             </div>
             <div>
               <NavItem>
-                <Link to='/'>Account</Link>
+                <Link to='/account'>Account</Link>
               </NavItem>
               <IconContext.Provider value={{ style: { paddingLeft: '20px' } }}>
                 <NavItem onClick={logout}>

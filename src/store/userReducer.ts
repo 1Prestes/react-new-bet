@@ -6,8 +6,22 @@ import api from '../Utils/axios-http-client'
 // import { removeCookie, setCookie } from '../Helpers/storageCookie'
 
 const initialState = {
-  error: ''
+  error: '',
+  user: {
+    username: '',
+    email: ''
+  }
 }
+
+export const fetchUser = createAsyncThunk(
+  'user/fetchUser',
+  async (token: string) => {
+    api.defaults.headers.authorization = `Bearer ${token}`
+
+    const response = await api.get('/users/user').then(res => res)
+    return response
+  }
+)
 
 export const createUser = createAsyncThunk(
   'user/setAuth',
@@ -20,23 +34,28 @@ export const createUser = createAsyncThunk(
 const usersSlice = createSlice({
   name: 'register',
   initialState,
-  reducers: {
-    // LOGOUT_USER (state) {
-    //   removeCookie('@AUTH_TOKEN')
-    //   return { ...state, user: {}, token: '', error: '' }
-    // }
-  },
+  reducers: {},
   extraReducers: builder => {
-    builder.addCase(createUser.fulfilled, (state, payload) => {
+    builder.addCase(createUser.fulfilled, state => {
       return { ...state, error: '' }
     })
 
-    builder.addCase(createUser.rejected, (state, payload) => {
+    builder.addCase(createUser.rejected, (state, action) => {
       let error = ''
-      if (payload.error.message === 'Request failed with status code 400') {
+      if (action.error.message === 'Request failed with status code 400') {
         error = 'E-mail already registered'
       }
       return { ...state, error: error }
+    })
+
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
+      const { username, email } = action.payload.data
+      return { ...state, user: { username, email } }
+    })
+
+    builder.addCase(fetchUser.rejected, (state, action) => {
+      console.log(action)
+      return state
     })
   }
 })
