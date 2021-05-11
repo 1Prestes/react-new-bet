@@ -39,7 +39,8 @@ const ForgotPassword: React.FC = () => {
       .then(() => {
         const data = {
           email: email.email,
-          redirect_url: 'http://localhost:3000/authentication/reset-password'
+          redirect_url:
+            'http://localhost:3000/authentication/reset-password/'
         }
         dispatch(forgotPassword(data))
           .then(res => {

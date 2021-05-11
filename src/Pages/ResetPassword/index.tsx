@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 import { IconContext } from 'react-icons'
 import * as yup from 'yup'
 
 // import { REGISTER_USER } from '../../store/userReducer'
-import { useAppSelector, useAppDispatch } from '../../store/hooks'
-import { createUser } from '../../store/userReducer'
-import { setAuth } from '../../store/sessionReducer'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { resetPassword } from '../../store/recoverPassword'
 import Input from '../../Components/Input'
 import Form from '../../Components/Form'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
@@ -15,29 +14,22 @@ import { TitleSM, OutlineButton } from '../../Components'
 import { showMessage } from '../../Helpers'
 
 const ResetPassword: React.FC = () => {
-  const [resetPassword, setResetPassword] = useState({
-    username: '',
-    email: '',
-    password: ''
+  const [password, setPassword] = useState({
+    password: '',
+    password_confirmation: ''
   })
-  const token = useAppSelector(state => state.session.token)
-  const currentUser = useAppSelector(state => state.user)
+  const errorPassword = useAppSelector(state => state.password.error)
   const dispatch = useAppDispatch()
   const history = useHistory()
 
-  useEffect(() => {
-    if (token) history.push('/')
-    if (currentUser.error) showMessage('error', currentUser.error)
-  }, [currentUser])
-
   const schema = yup.object().shape({
-    passwordConfirmation: yup
-      .string()
-      .oneOf([yup.ref('password'), null], 'Passwords must match'),
     password: yup
       .string()
       .min(6)
-      .required()
+      .required(),
+    password_confirmation: yup
+      .string()
+      .oneOf([yup.ref('password'), null], 'Passwords must match')
   })
 
   const handleClick = async (
@@ -46,19 +38,37 @@ const ResetPassword: React.FC = () => {
     event.preventDefault()
 
     await schema
-      .validate(resetPassword)
-      .then(res => {
-        dispatch(createUser(res)).then(() => {
-          const { email, password } = res
-          dispatch(setAuth({ email, password }))
-        })
+      .validate(password)
+      .then(() => {
+        const [, token] = history.location.search.split('=')
+        const data = {
+          token,
+          password: password.password,
+          password_confirmation: password.password_confirmation
+        }
+
+        dispatch(resetPassword(data))
+          .then(response => {
+            if (response.payload === undefined) {
+              return showMessage('error', 'Invalid token')
+            }
+            showMessage(
+              'success',
+              'Reset password successfully, you will be redirected in 3 seconds',
+              2000
+            )
+            setTimeout(() => {
+              history.push('/authentication/login')
+            }, 3000)
+          })
+          .catch(() => showMessage('error', errorPassword))
       })
       .catch(err => showMessage('error', err.errors[0]))
   }
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
     const target = event.target as HTMLInputElement
-    setResetPassword({ ...resetPassword, [target.name]: target.value })
+    setPassword({ ...password, [target.name]: target.value })
   }
 
   return (
@@ -72,15 +82,15 @@ const ResetPassword: React.FC = () => {
             type='password'
             placeholder='Password'
             name='password'
-            value={resetPassword.password}
+            value={password.password}
           />
 
           <Input
             changed={event => handleChange(event)}
-            type='password_confirmation'
+            type='password'
             placeholder='Password confirmation'
-            name='password'
-            value={resetPassword.password}
+            name='password_confirmation'
+            value={password.password_confirmation}
           />
 
           <OutlineButton
