@@ -12,7 +12,7 @@ import Input from '../../Components/Input'
 import Form from '../../Components/Form/'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
 import { TitleSM, OutlineButton } from '../../Components'
-import { showMessage } from '../../Helpers'
+import { getCookie, showMessage } from '../../Helpers'
 
 const SignUp: React.FC = () => {
   const [newUser, setNewUser] = useState({
@@ -20,7 +20,7 @@ const SignUp: React.FC = () => {
     email: '',
     password: ''
   })
-  const token = useAppSelector(state => state.session.token)
+  const token = getCookie('@AUTH_TOKEN')
   const currentUser = useAppSelector(state => state.user)
   const dispatch = useAppDispatch()
   const history = useHistory()

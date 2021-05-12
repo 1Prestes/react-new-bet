@@ -6,7 +6,7 @@ import { ICartItem, checkoutGames } from '../../store/gamesReducer'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import CartItem from '../CartItem'
 import { Span, TitleXS, OutlineButton } from '../'
-import { floatToReal, showMessage } from '../../Helpers'
+import { floatToReal, getCookie, showMessage } from '../../Helpers'
 import { HtmlCart, CartBody, CartContainer, CartFooter } from './Cart'
 
 interface CurrentValue {
@@ -14,7 +14,7 @@ interface CurrentValue {
 }
 
 const Cart = (): JSX.Element => {
-  const token = useAppSelector(state => state.session.token)
+  const token = getCookie('@AUTH_TOKEN')
   const cartItems: any = useAppSelector(state => state.games.cart)
   const dispatch = useAppDispatch()
   const history = useHistory()

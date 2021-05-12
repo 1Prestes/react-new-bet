@@ -24,7 +24,8 @@ import {
   numberExists,
   removeNumber,
   generateGameNumbers,
-  showMessage
+  showMessage,
+  getCookie
 } from '../../Helpers'
 import {
   Actions,
@@ -39,7 +40,7 @@ import {
 const NewBet: React.FC = () => {
   const [gameNumbers, setGameNumbers] = useState<number[]>([])
   const [betNumbers, setBetNumbers] = useState<number[]>([])
-  const token = useAppSelector(state => state.session.token)
+  const token = getCookie('@AUTH_TOKEN')
   const games = useAppSelector(state => state.games.games)
   const currentGame = useAppSelector(state => state.games.currentGame)
   const dispatch = useAppDispatch()

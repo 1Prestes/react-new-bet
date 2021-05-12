@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react'
 import { Route, useHistory } from 'react-router-dom'
 
-import { useAppSelector } from '../../store/hooks'
 import Login from '../SignIn'
 import SignUp from '../SignUp'
 import ForgotPassword from '../ForgotPassword'
 import ResetPassword from '../ResetPassword'
 import { TitleMD, TitleXL, Button } from '../../Components'
 import { Container, AuthenticationContainer } from './Authentication'
+import { getCookie } from '../../Helpers'
 
 const Authentication: React.FC = () => {
-  const token = useAppSelector(state => state.session.token)
+  const token = getCookie('@AUTH_TOKEN')
   const history = useHistory()
 
   useEffect(() => {

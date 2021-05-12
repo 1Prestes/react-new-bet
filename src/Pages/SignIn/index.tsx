@@ -10,7 +10,7 @@ import Form from '../../Components/Form/'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
 import Input from '../../Components/Input'
 import { TitleSM, OutlineButton } from '../../Components'
-import { showMessage } from '../../Helpers'
+import { getCookie, showMessage } from '../../Helpers'
 import { ForgetPasswordParagraph } from './SignIn'
 import { setAuth } from '../../store/sessionReducer'
 
@@ -18,11 +18,12 @@ const Login: React.FC = () => {
   const [user, setUser] = useState({ email: '', password: '' })
   // const currentUser = useAppSelector(state => state.user)
   const session = useAppSelector(state => state.session)
+  const token = getCookie('@AUTH_TOKEN')
   const history = useHistory()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (session.token) history.push('/')
+    if (token) history.push('/')
     if (session.error) showMessage('error', session.error)
   }, [session])
 

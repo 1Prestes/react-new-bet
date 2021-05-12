@@ -19,19 +19,18 @@ export const setAuth = createAsyncThunk(
 const sessionSlice = createSlice({
   name: 'session',
   initialState: {
-    error: '',
-    token: ''
+    error: ''
   },
   reducers: {
     LOGOUT_USER (state) {
       removeCookie('@AUTH_TOKEN')
-      return { ...state, token: '' }
+      return state
     }
   },
   extraReducers: builder => {
     builder.addCase(setAuth.fulfilled, (state, action) => {
       setCookie('@AUTH_TOKEN', action.payload.token)
-      return { ...state, token: action.payload.token, error: '' }
+      return { ...state, error: '' }
     })
 
     builder.addCase(setAuth.rejected, (state, action) => {
@@ -40,7 +39,7 @@ const sessionSlice = createSlice({
         error = 'incorrect data'
       }
 
-      return { ...state, token: '', error: error }
+      return { ...state, error: error }
     })
   }
 })

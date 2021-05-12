@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { fetchBets, fetchGames } from '../../store/gamesReducer'
 import Navbar from '../../Components/NavBar'
 import { Paragraph, Span, SubTitle, OutlineButton } from '../../Components/'
-import { floatToReal } from '../../Helpers'
+import { floatToReal, getCookie } from '../../Helpers'
 import {
   Container,
   Actions,
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
   const [filter, setFilter] = useState<number>()
   const [gamesFilter, setGamesFilter] = useState<Bet[]>([])
   const games = useAppSelector(state => state.games.games)
-  const token = useAppSelector(state => state.session.token)
+  const token = getCookie('@AUTH_TOKEN')
   const betCheckout: Bet[] = useAppSelector(state => state.games.checkout)
   const dispatch = useAppDispatch()
 

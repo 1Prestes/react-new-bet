@@ -11,7 +11,7 @@ import { AuthenticationFormContainer } from '../../Components/Form/Form'
 import { TitleSM, OutlineButton } from '../../Components'
 import Navbar from '../../Components/NavBar'
 import { fetchUser, updateUser } from '../../store/userReducer'
-import { showMessage } from '../../Helpers'
+import { getCookie, showMessage } from '../../Helpers'
 
 const Account = (): JSX.Element => {
   const [userUpdate, setUserUpdate] = useState({
@@ -22,7 +22,7 @@ const Account = (): JSX.Element => {
   })
 
   const user = useAppSelector(state => state.user.user)
-  const token = useAppSelector(state => state.session.token)
+  const token = getCookie('@AUTH_TOKEN')
   const dispatch = useAppDispatch()
   const history = useHistory()
 
