@@ -19,7 +19,7 @@ export const fetchUser = createAsyncThunk(
     api.defaults.headers.authorization = `Bearer ${token}`
 
     const response = await api.get('/users/user').then(res => res)
-    return response
+    return response.data
   }
 )
 
@@ -27,7 +27,7 @@ export const createUser = createAsyncThunk(
   'user/setAuth',
   async (data: object) => {
     const response = await api.post('/users', data).then(res => res)
-    return response
+    return response.data
   }
 )
 
@@ -35,7 +35,7 @@ export const updateUser = createAsyncThunk(
   'user/updateUser',
   async (data: object) => {
     const response = await api.put('/users', data).then(res => res)
-    return response
+    return response.data
   }
 )
 
@@ -57,7 +57,7 @@ const usersSlice = createSlice({
     })
 
     builder.addCase(fetchUser.fulfilled, (state, action) => {
-      const { username, email } = action.payload.data
+      const { username, email } = action.payload
       return { ...state, user: { username, email } }
     })
 

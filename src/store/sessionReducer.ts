@@ -9,10 +9,10 @@ interface Login {
 }
 
 export const setAuth = createAsyncThunk(
-  'user/setAuth',
+  'session/setAuth',
   async (login: Login) => {
     const response = await api.post('/sessions', login).then(res => res)
-    return response
+    return response.data
   }
 )
 
@@ -30,8 +30,8 @@ const sessionSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(setAuth.fulfilled, (state, action) => {
-      setCookie('@AUTH_TOKEN', action.payload.data.token)
-      return { ...state, token: action.payload.data.token, error: '' }
+      setCookie('@AUTH_TOKEN', action.payload.token)
+      return { ...state, token: action.payload.token, error: '' }
     })
 
     builder.addCase(setAuth.rejected, (state, action) => {

@@ -29,7 +29,7 @@ export const fetchGames = createAsyncThunk(
   async (token: string) => {
     api.defaults.headers.authorization = `Bearer ${token}`
     const response = await api.get('/games').then(res => res)
-    return response
+    return response.data
   }
 )
 
@@ -41,7 +41,7 @@ export const checkoutGames = createAsyncThunk(
 
     api.defaults.headers.authorization = `Bearer ${token}`
     const response = await api.post('/users/purchases', bet).then(res => res)
-    return response
+    return response.data
   }
 )
 
@@ -50,7 +50,7 @@ export const fetchBets = createAsyncThunk(
   async (token: string) => {
     api.defaults.headers.authorization = `Bearer ${token}`
     const response = await api.get('/users/purchases').then(res => res)
-    return response
+    return response.data
   }
 )
 
@@ -132,14 +132,14 @@ const gamesSlice = createSlice({
   },
   extraReducers: build => {
     build.addCase(fetchGames.fulfilled, (state, action) => {
-      return { ...state, games: action.payload.data }
+      return { ...state, games: action.payload }
     })
 
-    build.addCase(fetchGames.rejected, (state, action) => {
+    build.addCase(fetchGames.rejected, state => {
       return state
     })
 
-    build.addCase(checkoutGames.fulfilled, (state) => {
+    build.addCase(checkoutGames.fulfilled, state => {
       return { ...state, cart: [] }
     })
 
@@ -149,7 +149,7 @@ const gamesSlice = createSlice({
     })
 
     build.addCase(fetchBets.fulfilled, (state, action) => {
-      return { ...state, checkout: action.payload.data }
+      return { ...state, checkout: action.payload }
     })
 
     build.addCase(fetchBets.rejected, (state, action) => {

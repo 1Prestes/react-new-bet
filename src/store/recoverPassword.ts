@@ -17,7 +17,7 @@ export const forgotPassword = createAsyncThunk(
   'recover/forgotPassword',
   async (data: ForgotPassword) => {
     const response = await api.post('/passwords', data).then(res => res)
-    return response
+    return response.data
   }
 )
 
@@ -25,7 +25,7 @@ export const resetPassword = createAsyncThunk(
   'recover/resetPassword',
   async (newPassword: NewPassword) => {
     const response = await api.put('/passwords', newPassword).then(res => res)
-    return response
+    return response.data
   }
 )
 
@@ -36,15 +36,15 @@ const recoverSlice = createSlice({
   },
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(forgotPassword.fulfilled, (state, action) => {
+    builder.addCase(forgotPassword.fulfilled, state => {
       return { ...state, error: '' }
     })
 
-    builder.addCase(forgotPassword.rejected, (state, action) => {
+    builder.addCase(forgotPassword.rejected, state => {
       return { ...state, error: 'Not found.' }
     })
 
-    builder.addCase(resetPassword.fulfilled, (state, action) => {
+    builder.addCase(resetPassword.fulfilled, state => {
       return { ...state, error: '' }
     })
 
