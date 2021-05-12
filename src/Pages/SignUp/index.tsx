@@ -56,6 +56,14 @@ const SignUp: React.FC = () => {
         dispatch(createUser(res)).then(() => {
           const { email, password } = res
           dispatch(setAuth({ email, password }))
+          showMessage(
+            'success',
+            'Sign-up successfully, you will be redirected in 3 seconds',
+            2000
+          )
+          setTimeout(() => {
+            history.push('/home')
+          }, 2000)
         })
       })
       .catch(err => showMessage('error', err.errors[0]))

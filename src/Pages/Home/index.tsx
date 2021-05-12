@@ -32,6 +32,7 @@ const Home: React.FC = () => {
   const [filter, setFilter] = useState<number>()
   const [gamesFilter, setGamesFilter] = useState<Bet[]>([])
   const games = useAppSelector(state => state.games.games)
+  const cart = useAppSelector(state => state.games.cart)
   const token = getCookie('@AUTH_TOKEN')
   const betCheckout: Bet[] = useAppSelector(state => state.games.checkout)
   const dispatch = useAppDispatch()
@@ -46,10 +47,15 @@ const Home: React.FC = () => {
     setGamesFilter(betCheckout)
   }, [betCheckout])
 
+  useEffect(() => {
+    dispatch(fetchBets(token))
+  }, [cart])
+
   const selectFilter = (filter: number): void => {
     const currentBetsFilter = betCheckout.filter(
       game => game.game_id === filter
     )
+
     setFilter(filter)
     setGamesFilter(currentBetsFilter)
   }
@@ -68,7 +74,7 @@ const Home: React.FC = () => {
               Filters
             </Paragraph>
             <Filters>
-              {games[0].type &&
+              {games[0]?.type &&
                 games.map(game => {
                   let { color, type } = game
                   let backgroundColor = 'transparent'

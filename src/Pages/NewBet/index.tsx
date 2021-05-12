@@ -55,6 +55,8 @@ const NewBet: React.FC = () => {
 
   useEffect(() => {
     setGameNumbers([])
+    if (!currentGame) return
+
     for (let i = 1; i <= currentGame.range; i++) {
       setGameNumbers(prevState => [...prevState, i])
     }
@@ -189,57 +191,58 @@ const NewBet: React.FC = () => {
                 )
               })}
           </ChooseNumber>
-
-          <Actions>
-            <ActionsContainer>
-              <OutlineButton
-                onClick={completeGame}
-                margin='5px 25px auto 0'
-                padding='17px 25px'
-                fontWeight='600'
-                fontStyle='normal'
-                border='1px solid #27c383'
-                fontSize='1em'
-                color='#27c383'
+          {currentGame && (
+            <Actions>
+              <ActionsContainer>
+                <OutlineButton
+                  onClick={completeGame}
+                  margin='5px 25px auto 0'
+                  padding='17px 25px'
+                  fontWeight='600'
+                  fontStyle='normal'
+                  border='1px solid #27c383'
+                  fontSize='1em'
+                  color='#27c383'
+                >
+                  Complete Game
+                </OutlineButton>
+                <OutlineButton
+                  onClick={() => clearGame(true)}
+                  margin='5px 25px auto 0'
+                  padding='17px 25px'
+                  fontWeight='600'
+                  fontStyle='normal'
+                  border='1px solid #27c383'
+                  fontSize='1em'
+                  color='#27c383'
+                >
+                  Clear game
+                </OutlineButton>
+              </ActionsContainer>
+              <IconContext.Provider
+                value={{
+                  style: {
+                    width: '30px',
+                    fontSize: '30px',
+                    marginRight: '28px'
+                  }
+                }}
               >
-                Complete Game
-              </OutlineButton>
-              <OutlineButton
-                onClick={() => clearGame(true)}
-                margin='5px 25px auto 0'
-                padding='17px 25px'
-                fontWeight='600'
-                fontStyle='normal'
-                border='1px solid #27c383'
-                fontSize='1em'
-                color='#27c383'
-              >
-                Clear game
-              </OutlineButton>
-            </ActionsContainer>
-            <IconContext.Provider
-              value={{
-                style: {
-                  width: '30px',
-                  fontSize: '30px',
-                  marginRight: '28px'
-                }
-              }}
-            >
-              <Button
-                onClick={addToCart}
-                backgroundColor='#27c383'
-                padding='17px 43px'
-                borderRadius='10px'
-                fontWeight='600'
-                fontStyle='normal'
-                color='#fff'
-              >
-                <IoCartOutline />
-                Add to cart
-              </Button>
-            </IconContext.Provider>
-          </Actions>
+                <Button
+                  onClick={addToCart}
+                  backgroundColor='#27c383'
+                  padding='17px 43px'
+                  borderRadius='10px'
+                  fontWeight='600'
+                  fontStyle='normal'
+                  color='#fff'
+                >
+                  <IoCartOutline />
+                  Add to cart
+                </Button>
+              </IconContext.Provider>
+            </Actions>
+          )}
         </BetGuide>
 
         <Cart />
