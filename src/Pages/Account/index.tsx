@@ -173,12 +173,13 @@ const Account = (): JSX.Element => {
               </OutlineButton>
             </Form>
           )}
-
-          <OutlineButton color='#707070' fontSize='2.1875em' margin='30px'>
-            <Link to='/home'>
-              <IoMdArrowBack /> Back to Home
-            </Link>
-          </OutlineButton>
+          {!error && (
+            <OutlineButton color='#707070' fontSize='2.1875em' margin='30px'>
+              <Link to='/home'>
+                <IoMdArrowBack /> Back to Home
+              </Link>
+            </OutlineButton>
+          )}
         </IconContext.Provider>
       </AuthenticationFormContainer>
     </>

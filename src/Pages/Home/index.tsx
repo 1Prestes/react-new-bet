@@ -157,72 +157,70 @@ const Home: React.FC = () => {
           </Actions>
         )}
 
-        {!betCheckout.length && (
-          <Games>
-            {!betCheckout.length && (
-              <SubTitle fontSize='1.2em' fontStyle='normal'>
-                Opsy! It seems that you still don't have any bet done. Why don't
-                you go to the bet page and{' '}
-                <Span color='green'>
-                  <Link to='/new-bet'>start it right now?</Link>
-                </Span>
-              </SubTitle>
-            )}
+        <Games>
+          {!betCheckout.length && !error && (
+            <SubTitle fontSize='1.2em' fontStyle='normal'>
+              Opsy! It seems that you still don't have any bet done. Why don't
+              you go to the bet page and{' '}
+              <Span color='green'>
+                <Link to='/new-bet'>start it right now?</Link>
+              </Span>
+            </SubTitle>
+          )}
 
-            {!!betCheckout.length && !gamesFilter.length && (
-              <SubTitle fontSize='1.2em' fontStyle='normal'>
-                Opsy! I see that you still don't have any bet from type{' '}
-                <Span color='#505050'>{filter}</Span>, what about you move to
-                the bet page and{' '}
-                <Span color='green'>
-                  <Link to='/new-bet'>take a chance right now?</Link>
-                </Span>
-              </SubTitle>
-            )}
+          {!!betCheckout.length && !gamesFilter.length && (
+            <SubTitle fontSize='1.2em' fontStyle='normal'>
+              Opsy! I see that you still don't have any bet from type{' '}
+              <Span color='#505050'>
+                {games.filter(game => game.id === filter)[0]?.type}
+              </Span>
+              , what about you move to the bet page and{' '}
+              <Span color='green'>
+                <Link to='/new-bet'>take a chance right now?</Link>
+              </Span>
+            </SubTitle>
+          )}
 
-            {gamesFilter?.map((bet: Bet) => {
-              return (
-                <Game key={bet.id}>
-                  <BorderLeft
+          {gamesFilter?.map((bet: Bet) => {
+            return (
+              <Game key={bet.id}>
+                <BorderLeft
+                  color={games.filter(game => game.id === bet.game_id)[0]?.color}
+                />
+                <div>
+                  <Paragraph fontSize='1.25em' color='#868686'>
+                    {bet.betnumbers
+                      .split(',')
+                      .map(number => Number(number))
+                      .slice()
+                      .sort((a, b) => a - b)
+                      .map(number => {
+                        return number < 10 ? `0${number}` : number
+                      })
+                      .join(', ')}
+                  </Paragraph>
+                  <Paragraph
+                    margin='15px auto'
+                    fontSize='17px'
+                    color='#868686'
+                    fontWeight='normal'
+                  >
+                    {new Date(bet.created_at).toLocaleDateString('pt-br')} - (R${' '}
+                    {floatToReal(bet.price)})
+                  </Paragraph>
+                  <SubTitle
+                    fontSize='1.25em'
                     color={
-                      games.filter(game => game.id === bet.game_id)[0].color
+                      games.filter(game => game.id === bet.game_id)[0]?.color
                     }
-                  />
-                  <div>
-                    <Paragraph fontSize='1.25em' color='#868686'>
-                      {bet.betnumbers
-                        .split(',')
-                        .map(number => Number(number))
-                        .slice()
-                        .sort((a, b) => a - b)
-                        .map(number => {
-                          return number < 10 ? `0${number}` : number
-                        })
-                        .join(', ')}
-                    </Paragraph>
-                    <Paragraph
-                      margin='15px auto'
-                      fontSize='17px'
-                      color='#868686'
-                      fontWeight='normal'
-                    >
-                      {new Date(bet.created_at).toLocaleDateString('pt-br')} -
-                      (R$ {floatToReal(bet.price)})
-                    </Paragraph>
-                    <SubTitle
-                      fontSize='1.25em'
-                      color={
-                        games.filter(game => game.id === bet.game_id)[0].color
-                      }
-                    >
-                      {games.filter(game => game.id === bet.game_id)[0].type}
-                    </SubTitle>
-                  </div>
-                </Game>
-              )
-            })}
-          </Games>
-        )}
+                  >
+                    {games.filter(game => game.id === bet.game_id)[0]?.type}
+                  </SubTitle>
+                </div>
+              </Game>
+            )
+          })}
+        </Games>
       </Container>
     </>
   )

@@ -24,9 +24,9 @@ const Navbar = ({ linkToHome }: LinkToHome): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false)
   const dispatch = useAppDispatch()
   const logout = (): void => {
+    dispatch(LOGOUT_USER())
     dispatch(CLEAR_DATA())
     dispatch(CLEAR_USER_ERROR())
-    dispatch(LOGOUT_USER())
   }
 
   const handleClick = (): void => {
