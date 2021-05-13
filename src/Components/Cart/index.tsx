@@ -2,7 +2,7 @@ import { useHistory } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward } from 'react-icons/io'
 
-import { ICartItem, checkoutGames } from '../../store/gamesReducer'
+import { ICartItem, checkoutGames, CLEAR_CART } from '../../store/gamesReducer'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import CartItem from '../CartItem'
 import { Span, TitleXS, OutlineButton } from '../'
@@ -29,20 +29,41 @@ const Cart = (): JSX.Element => {
   }
 
   const checkout = (): void => {
+    if (totalCart() < 30) {
+      showMessage(
+        'error',
+        'The minimum cart value is $ 30, add more games to the cart and try again.',
+        5000
+      )
+      return
+    }
+
     const games = cartItems.map((item: ICartItem) => ({
       game_id: item.game_id,
       betnumbers: item.bet.toString()
     }))
 
-    showMessage(
-      'success',
-      'Congratulations, you will be redirected in 2 seconds',
-      2000
-    )
-    setTimeout(() => {
-      dispatch(checkoutGames({ token, games }))
-      history.push('/home')
-    }, 3000)
+    dispatch(checkoutGames({ token, games }))
+      .then(res => {
+        if (res.payload === undefined) {
+          showMessage(
+            'error',
+            'Error connecting to the server, try again or wait a few minutes'
+          )
+          return
+        }
+
+        showMessage(
+          'success',
+          'Congratulations, you will be redirected in 2 seconds',
+          2000
+        )
+        setTimeout(() => {
+          dispatch(CLEAR_CART())
+          history.push('/home')
+        }, 3000)
+      })
+      .catch(error => showMessage('error', error.message))
   }
 
   return (
@@ -88,11 +109,7 @@ const Cart = (): JSX.Element => {
       {!!totalCart() && (
         <CartFooter>
           <IconContext.Provider value={{ style: { paddingLeft: '19px' } }}>
-            <OutlineButton
-              onClick={checkout}
-              disabled={totalCart() < 30}
-              color='#27c383'
-            >
+            <OutlineButton onClick={checkout} color='#27c383'>
               Save <IoMdArrowForward />
             </OutlineButton>
           </IconContext.Provider>

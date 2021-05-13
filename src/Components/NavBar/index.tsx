@@ -14,6 +14,7 @@ import {
   NavItem
 } from './NavBar'
 import { CLEAR_DATA } from '../../store/gamesReducer'
+import { CLEAR_USER_ERROR } from '../../store/userReducer'
 
 interface LinkToHome {
   linkToHome?: boolean
@@ -24,6 +25,7 @@ const Navbar = ({ linkToHome }: LinkToHome): JSX.Element => {
   const dispatch = useAppDispatch()
   const logout = (): void => {
     dispatch(CLEAR_DATA())
+    dispatch(CLEAR_USER_ERROR())
     dispatch(LOGOUT_USER())
   }
 

@@ -24,7 +24,7 @@ export const forgotPassword = createAsyncThunk(
 export const resetPassword = createAsyncThunk(
   'recover/resetPassword',
   async (newPassword: NewPassword) => {
-    const response = await api.put('/passwords', newPassword).then(res => res)
+    const response = await api.put('/passwords', newPassword)
     return response.data
   }
 )
@@ -40,8 +40,17 @@ const recoverSlice = createSlice({
       return { ...state, error: '' }
     })
 
-    builder.addCase(forgotPassword.rejected, state => {
-      return { ...state, error: 'Not found.' }
+    builder.addCase(forgotPassword.rejected, (state, action) => {
+      let error = ''
+      if (action.error.message === 'Request failed with status code 404') {
+        error = 'Email not found. Check the email provided and try again'
+      }
+
+      if (action.error.message === 'Network Error') {
+        error =
+          'Error connecting to the server, try again or wait a few minutes'
+      }
+      return { ...state, error: error }
     })
 
     builder.addCase(resetPassword.fulfilled, state => {

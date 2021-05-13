@@ -6,7 +6,7 @@ import * as yup from 'yup'
 
 // import { REGISTER_USER } from '../../store/userReducer'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
-import { createUser } from '../../store/userReducer'
+import { CLEAR_USER_ERROR, createUser } from '../../store/userReducer'
 import { setAuth } from '../../store/sessionReducer'
 import Input from '../../Components/Input'
 import Form from '../../Components/Form/'
@@ -27,8 +27,11 @@ const SignUp: React.FC = () => {
 
   useEffect(() => {
     if (token) history.push('/')
-    if (currentUser.error) showMessage('error', currentUser.error)
   }, [currentUser])
+
+  useEffect(() => {
+    if (currentUser.error) showMessage('error', currentUser.error)
+  }, [currentUser.error])
 
   const schema = yup.object().shape({
     password: yup
@@ -55,15 +58,22 @@ const SignUp: React.FC = () => {
       .then(res => {
         dispatch(createUser(res)).then(() => {
           const { email, password } = res
-          dispatch(setAuth({ email, password }))
-          showMessage(
-            'success',
-            'Sign-up successfully, you will be redirected in 3 seconds',
-            2000
-          )
-          setTimeout(() => {
-            history.push('/home')
-          }, 2000)
+          dispatch(setAuth({ email, password })).then(res => {
+            console.log(res)
+            if (res.payload) {
+              showMessage(
+                'success',
+                'Sign-up successfully, you will be redirected in 2 seconds',
+                2000
+              )
+
+              return setTimeout(() => {
+                history.push('/home')
+              }, 2000)
+            }
+
+            dispatch(CLEAR_USER_ERROR())
+          })
         })
       })
       .catch(err => showMessage('error', err.errors[0]))

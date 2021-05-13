@@ -48,3 +48,11 @@ export const BorderLeft = styled.div`
   width: 6px;
   border-radius: 100px;
 `
+
+export const ErrorContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 50px;
+`

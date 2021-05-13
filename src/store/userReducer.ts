@@ -18,7 +18,7 @@ export const fetchUser = createAsyncThunk(
   async (token: string) => {
     api.defaults.headers.authorization = `Bearer ${token}`
 
-    const response = await api.get('/users/user').then(res => res)
+    const response = await api.get('/users/user')
     return response.data
   }
 )
@@ -26,7 +26,7 @@ export const fetchUser = createAsyncThunk(
 export const createUser = createAsyncThunk(
   'user/setAuth',
   async (data: object) => {
-    const response = await api.post('/users', data).then(res => res)
+    const response = await api.post('/users', data)
     return response.data
   }
 )
@@ -34,7 +34,7 @@ export const createUser = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   'user/updateUser',
   async (data: object) => {
-    const response = await api.put('/users', data).then(res => res)
+    const response = await api.put('/users', data)
     return response.data
   }
 )
@@ -42,7 +42,11 @@ export const updateUser = createAsyncThunk(
 const usersSlice = createSlice({
   name: 'register',
   initialState,
-  reducers: {},
+  reducers: {
+    CLEAR_USER_ERROR: state => {
+      return { ...state, error: '' }
+    }
+  },
   extraReducers: builder => {
     builder.addCase(createUser.fulfilled, state => {
       return { ...state, error: '' }
@@ -53,31 +57,41 @@ const usersSlice = createSlice({
       if (action.error.message === 'Request failed with status code 400') {
         error = 'E-mail already registered'
       }
+
+      if (action.error.message === 'Network Error') {
+        error =
+          'Error connecting to the server, try again or wait a few minutes'
+      }
       return { ...state, error: error }
     })
 
     builder.addCase(fetchUser.fulfilled, (state, action) => {
       const { username, email } = action.payload
-      return { ...state, user: { username, email } }
+      return { ...state, user: { username, email }, error: '' }
     })
 
     builder.addCase(fetchUser.rejected, (state, action) => {
-      console.log(action)
+      if (action.error.message === 'Network Error') {
+        state.error =
+          'Error connecting to the server, try again or wait a few minutes'
+      }
       return state
     })
 
     builder.addCase(updateUser.fulfilled, (state, action) => {
-      console.log(action)
-      return state
+      return { ...state, error: '' }
     })
 
     builder.addCase(updateUser.rejected, (state, action) => {
-      console.log(action)
+      if (action.error.message === 'Network Error') {
+        state.error =
+          'Error connecting to the server, try again or wait a few minutes'
+      }
       return state
     })
   }
 })
 
-// export const { AUTH_USER } = usersSlice.actions
+export const { CLEAR_USER_ERROR } = usersSlice.actions
 // export const user = (state: RootState): RootState => state
 export default usersSlice.reducer

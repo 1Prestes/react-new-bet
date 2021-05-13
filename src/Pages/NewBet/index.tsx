@@ -34,20 +34,30 @@ import {
   BetGuide,
   ChooseNumber,
   GameInfo,
-  GamesContainer
+  GamesContainer,
+  ErrorContainer
 } from './NewBet'
 
 const NewBet: React.FC = () => {
   const [gameNumbers, setGameNumbers] = useState<number[]>([])
   const [betNumbers, setBetNumbers] = useState<number[]>([])
+  const [loading, setLoading] = useState(false)
+
   const token = getCookie('@AUTH_TOKEN')
   const games = useAppSelector(state => state.games.games)
+  const error = useAppSelector(state => state.games.error)
   const currentGame = useAppSelector(state => state.games.currentGame)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(fetchGames(token))
   }, [])
+
+  useEffect(() => {
+    if (error) {
+      showMessage('error', error)
+    }
+  }, [error])
 
   useEffect(() => {
     dispatch(SET_CURRENT_GAME(games[0]))
@@ -124,128 +134,157 @@ const NewBet: React.FC = () => {
     clearGame(false)
   }
 
+  const reconnect = (): void => {
+    setLoading(true)
+    dispatch(fetchGames(token)).then(res => {
+      setTimeout(() => {
+        if (!res.payload) {
+          return setLoading(false)
+        }
+      }, 1000)
+    })
+  }
+
   return (
     <>
       <Navbar linkToHome={true} />
 
       <BetContainer>
-        <BetGuide>
-          <TitleXS>
-            NEW BET{' '}
-            <Span textTransform='uppercase' fontWeight='lighter'>
-              FOR {currentGame?.type}
-            </Span>
-          </TitleXS>
-
-          <GameInfo>
-            <SubTitle fontSize='1.0625em'>Choose a game</SubTitle>
-            <GamesContainer>
-              {games?.map(game => {
-                let { color, type } = game
-                let backgroundColor = 'transparent'
-                const border = color
-                if (game.type === currentGame.type) {
-                  backgroundColor = color
-                  color = '#fff'
-                }
-
-                return (
-                  <OutlineButton
-                    key={game.type}
-                    onClick={toggleGame}
-                    data-current-game={game.type}
-                    fontSize='0.875em'
-                    color={color}
-                    backgroundColor={backgroundColor}
-                    border={`2px solid ${border}`}
-                    margin='20px 25px auto 0'
-                  >
-                    {type}
-                  </OutlineButton>
-                )
-              })}
-            </GamesContainer>
-          </GameInfo>
-
-          <GameInfo>
-            <SubTitle margin='10px auto' fontSize='1.0625em'>
-              Fill your bet
-            </SubTitle>
-            <Paragraph fontSize='1.0625em' fontWeight='lighter'>
-              {currentGame?.description}
-            </Paragraph>
-          </GameInfo>
-
-          <ChooseNumber>
-            {currentGame &&
-              gameNumbers.map(number => {
-                let selected = false
-                if (betNumbers.includes(number)) selected = true
-                return (
-                  <GameNumbers
-                    key={number}
-                    number={number}
-                    selected={selected}
-                    clicked={chooseNumber}
-                  />
-                )
-              })}
-          </ChooseNumber>
-          {currentGame && (
-            <Actions>
-              <ActionsContainer>
-                <OutlineButton
-                  onClick={completeGame}
-                  margin='5px 25px auto 0'
-                  padding='17px 25px'
-                  fontWeight='600'
-                  fontStyle='normal'
-                  border='1px solid #27c383'
-                  fontSize='1em'
-                  color='#27c383'
-                >
-                  Complete Game
-                </OutlineButton>
-                <OutlineButton
-                  onClick={() => clearGame(true)}
-                  margin='5px 25px auto 0'
-                  padding='17px 25px'
-                  fontWeight='600'
-                  fontStyle='normal'
-                  border='1px solid #27c383'
-                  fontSize='1em'
-                  color='#27c383'
-                >
-                  Clear game
-                </OutlineButton>
-              </ActionsContainer>
-              <IconContext.Provider
-                value={{
-                  style: {
-                    width: '30px',
-                    fontSize: '30px',
-                    marginRight: '28px'
-                  }
-                }}
+        {!games[0].type && (
+          <ErrorContainer>
+            <SubTitle fontSize='1.5em' margin='auto 35px auto 0'>
+              Error connecting to the server,{' '}
+              <Button
+                margin='10px auto'
+                padding='5px 15px'
+                backgroundColor='#ffc107'
+                onClick={reconnect}
               >
-                <Button
-                  onClick={addToCart}
-                  backgroundColor='#27c383'
-                  padding='17px 43px'
-                  borderRadius='10px'
-                  fontWeight='600'
-                  fontStyle='normal'
-                  color='#fff'
-                >
-                  <IoCartOutline />
-                  Add to cart
-                </Button>
-              </IconContext.Provider>
-            </Actions>
-          )}
-        </BetGuide>
+                {!loading && 'try again'}
+                {loading && 'carregando...'}
+              </Button>
+            </SubTitle>
+          </ErrorContainer>
+        )}
+        {games[0].type && (
+          <BetGuide>
+            <TitleXS>
+              NEW BET{' '}
+              <Span textTransform='uppercase' fontWeight='lighter'>
+                FOR {currentGame?.type}
+              </Span>
+            </TitleXS>
 
-        <Cart />
+            <GameInfo>
+              <SubTitle fontSize='1.0625em'>Choose a game</SubTitle>
+              <GamesContainer>
+                {games?.map(game => {
+                  let { color, type } = game
+                  let backgroundColor = 'transparent'
+                  const border = color
+                  if (game.type === currentGame.type) {
+                    backgroundColor = color
+                    color = '#fff'
+                  }
+
+                  return (
+                    <OutlineButton
+                      key={game.type}
+                      onClick={toggleGame}
+                      data-current-game={game.type}
+                      fontSize='0.875em'
+                      color={color}
+                      backgroundColor={backgroundColor}
+                      border={`2px solid ${border}`}
+                      margin='20px 25px auto 0'
+                    >
+                      {type}
+                    </OutlineButton>
+                  )
+                })}
+              </GamesContainer>
+            </GameInfo>
+
+            <GameInfo>
+              <SubTitle margin='10px auto' fontSize='1.0625em'>
+                Fill your bet
+              </SubTitle>
+              <Paragraph fontSize='1.0625em' fontWeight='lighter'>
+                {currentGame?.description}
+              </Paragraph>
+            </GameInfo>
+
+            <ChooseNumber>
+              {currentGame &&
+                gameNumbers.map(number => {
+                  let selected = false
+                  if (betNumbers.includes(number)) selected = true
+                  return (
+                    <GameNumbers
+                      key={number}
+                      number={number}
+                      selected={selected}
+                      clicked={chooseNumber}
+                    />
+                  )
+                })}
+            </ChooseNumber>
+            {currentGame && (
+              <Actions>
+                <ActionsContainer>
+                  <OutlineButton
+                    onClick={completeGame}
+                    margin='5px 25px auto 0'
+                    padding='17px 25px'
+                    fontWeight='600'
+                    fontStyle='normal'
+                    border='1px solid #27c383'
+                    fontSize='1em'
+                    color='#27c383'
+                  >
+                    Complete Game
+                  </OutlineButton>
+                  <OutlineButton
+                    onClick={() => clearGame(true)}
+                    margin='5px 25px auto 0'
+                    padding='17px 25px'
+                    fontWeight='600'
+                    fontStyle='normal'
+                    border='1px solid #27c383'
+                    fontSize='1em'
+                    color='#27c383'
+                  >
+                    Clear game
+                  </OutlineButton>
+                </ActionsContainer>
+                <IconContext.Provider
+                  value={{
+                    style: {
+                      width: '30px',
+                      fontSize: '30px',
+                      marginRight: '28px'
+                    }
+                  }}
+                >
+                  <Button
+                    onClick={addToCart}
+                    backgroundColor='#27c383'
+                    padding='17px 43px'
+                    borderRadius='10px'
+                    fontWeight='600'
+                    fontStyle='normal'
+                    color='#fff'
+                  >
+                    <IoCartOutline />
+                    Add to cart
+                  </Button>
+                </IconContext.Provider>
+              </Actions>
+            )}
+          </BetGuide>
+        )}
+
+        {games[0].type && <Cart />}
       </BetContainer>
     </>
   )

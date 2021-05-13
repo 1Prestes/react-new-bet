@@ -11,7 +11,7 @@ interface Login {
 export const setAuth = createAsyncThunk(
   'session/setAuth',
   async (login: Login) => {
-    const response = await api.post('/sessions', login).then(res => res)
+    const response = await api.post('/sessions', login)
     return response.data
   }
 )
@@ -25,6 +25,9 @@ const sessionSlice = createSlice({
     LOGOUT_USER (state) {
       removeCookie('@AUTH_TOKEN')
       return state
+    },
+    CLEAR_SESSION (state) {
+      return { ...state, error: '' }
     }
   },
   extraReducers: builder => {
@@ -36,7 +39,12 @@ const sessionSlice = createSlice({
     builder.addCase(setAuth.rejected, (state, action) => {
       let error = ''
       if (action.error.message === 'Request failed with status code 401') {
-        error = 'incorrect data'
+        error = 'Error, check the data and try again'
+      }
+
+      if (action.error.message === 'Network Error') {
+        error =
+          'Error connecting to the server, try again or wait a few minutes'
       }
 
       return { ...state, error: error }
@@ -44,5 +52,5 @@ const sessionSlice = createSlice({
   }
 })
 
-export const { LOGOUT_USER } = sessionSlice.actions
+export const { LOGOUT_USER, CLEAR_SESSION } = sessionSlice.actions
 export default sessionSlice.reducer

@@ -78,7 +78,8 @@ const initialState = {
     type: ''
   },
   cart: [],
-  checkout: []
+  checkout: [],
+  error: ''
 }
 
 const gamesSlice = createSlice({
@@ -97,8 +98,8 @@ const gamesSlice = createSlice({
       )
       return { ...state, cart: newCart }
     },
-    ADD_TO_CHECKOUT (state, action) {
-      return { ...state, checkout: action.payload, cart: [] }
+    CLEAR_CART (state) {
+      return { ...state, cart: [], error: '' }
     },
     CLEAR_DATA (state) {
       return {
@@ -132,19 +133,22 @@ const gamesSlice = createSlice({
   },
   extraReducers: build => {
     build.addCase(fetchGames.fulfilled, (state, action) => {
-      return { ...state, games: action.payload }
+      return { ...state, games: action.payload, error: '' }
     })
 
-    build.addCase(fetchGames.rejected, state => {
+    build.addCase(fetchGames.rejected, (state, action) => {
+      if (action.error.message === 'Network Error') {
+        state.error =
+          'Error connecting to the server, try again or wait a few minutes'
+      }
       return state
     })
 
     build.addCase(checkoutGames.fulfilled, state => {
-      return { ...state, cart: [] }
+      return state
     })
 
-    build.addCase(checkoutGames.rejected, (state, action) => {
-      console.log(action)
+    build.addCase(checkoutGames.rejected, state => {
       return state
     })
 
@@ -152,8 +156,7 @@ const gamesSlice = createSlice({
       return { ...state, checkout: action.payload }
     })
 
-    build.addCase(fetchBets.rejected, (state, action) => {
-      console.log(action)
+    build.addCase(fetchBets.rejected, state => {
       return state
     })
   }
@@ -163,7 +166,7 @@ export const {
   SET_CURRENT_GAME,
   ADD_BET_TO_CART,
   REMOVE_BET_OF_CART,
-  ADD_TO_CHECKOUT,
+  CLEAR_CART,
   CLEAR_DATA
 } = gamesSlice.actions
 export const user = (state: RootState): RootState => state

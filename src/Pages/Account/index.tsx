@@ -8,12 +8,15 @@ import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import Input from '../../Components/Input'
 import Form from '../../Components/Form/'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
-import { TitleSM, OutlineButton } from '../../Components'
+import { TitleSM, SubTitle, OutlineButton, Button } from '../../Components'
 import Navbar from '../../Components/NavBar'
 import { fetchUser, updateUser } from '../../store/userReducer'
 import { getCookie, showMessage } from '../../Helpers'
+import { ErrorContainer } from './Account'
 
 const Account = (): JSX.Element => {
+  const [loading, setLoading] = useState(false)
+
   const [userUpdate, setUserUpdate] = useState({
     username: '',
     email: '',
@@ -22,12 +25,19 @@ const Account = (): JSX.Element => {
   })
 
   const user = useAppSelector(state => state.user.user)
+  const error = useAppSelector(state => state.user.error)
   const token = getCookie('@AUTH_TOKEN')
   const dispatch = useAppDispatch()
   const history = useHistory()
 
   useEffect(() => {
-    dispatch(fetchUser(token))
+    dispatch(fetchUser(token)).then(res => {
+      if (!res.payload) {
+        if (error) {
+          showMessage('error', error)
+        }
+      }
+    })
   }, [])
 
   useEffect(() => {
@@ -85,53 +95,84 @@ const Account = (): JSX.Element => {
     setUserUpdate({ ...userUpdate, [target.name]: target.value })
   }
 
+  const reconnect = (): void => {
+    setLoading(true)
+    dispatch(fetchUser(token)).then(res => {
+      setTimeout(() => {
+        if (!res.payload) {
+          return setLoading(false)
+        }
+      }, 1000)
+    })
+  }
+
   return (
     <>
       <Navbar linkToHome={true} />
       <AuthenticationFormContainer>
         <IconContext.Provider value={{ style: { padding: '0 19px' } }}>
-          <TitleSM margin='26px auto'>Hello {user.username}</TitleSM>
+          {error && (
+            <ErrorContainer>
+              <SubTitle fontSize='1.5em' margin='auto 35px auto 0'>
+                Error connecting to the server,{' '}
+                <Button
+                  margin='10px auto'
+                  padding='5px 15px'
+                  backgroundColor='#ffc107'
+                  onClick={reconnect}
+                >
+                  {!loading && 'try again'}
+                  {loading && 'carregando...'}
+                </Button>
+              </SubTitle>
+            </ErrorContainer>
+          )}
+          {!error && (
+            <TitleSM margin='26px auto'>Hello {user.username}</TitleSM>
+          )}
 
-          <Form>
-            <Input
-              changed={event => handleChange(event)}
-              type='text'
-              placeholder='Username'
-              name='username'
-              value={userUpdate.username}
-            />
-            <Input
-              changed={event => handleChange(event)}
-              type='email'
-              placeholder='Email'
-              name='email'
-              value={userUpdate.email}
-            />
-            <Input
-              changed={event => handleChange(event)}
-              type='password'
-              placeholder='Password'
-              name='password'
-              value={userUpdate.password}
-            />
+          {!error && (
+            <Form>
+              <Input
+                changed={event => handleChange(event)}
+                type='text'
+                placeholder='Username'
+                name='username'
+                value={userUpdate.username}
+              />
+              <Input
+                changed={event => handleChange(event)}
+                type='email'
+                placeholder='Email'
+                name='email'
+                value={userUpdate.email}
+              />
+              <Input
+                changed={event => handleChange(event)}
+                type='password'
+                placeholder='Password'
+                name='password'
+                value={userUpdate.password}
+              />
 
-            <Input
-              changed={event => handleChange(event)}
-              type='password'
-              placeholder='Password confirmation'
-              name='password_confirmation'
-              value={userUpdate.password_confirmation}
-            />
+              <Input
+                changed={event => handleChange(event)}
+                type='password'
+                placeholder='Password confirmation'
+                name='password_confirmation'
+                value={userUpdate.password_confirmation}
+              />
 
-            <OutlineButton
-              onClick={handleClick}
-              color='#b5C401'
-              fontSize='2.1875em'
-              margin='17px auto'
-            >
-              Update <IoMdArrowForward />
-            </OutlineButton>
-          </Form>
+              <OutlineButton
+                onClick={handleClick}
+                color='#b5C401'
+                fontSize='2.1875em'
+                margin='17px auto'
+              >
+                Update <IoMdArrowForward />
+              </OutlineButton>
+            </Form>
+          )}
 
           <OutlineButton color='#707070' fontSize='2.1875em' margin='30px'>
             <Link to='/home'>

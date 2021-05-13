@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { IconContext } from 'react-icons'
 import { IoMdArrowForward, IoMdArrowBack } from 'react-icons/io'
 import * as yup from 'yup'
 
-import { useAppDispatch } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { forgotPassword } from '../../store/recoverPassword'
 import Form from '../../Components/Form'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
@@ -15,7 +15,14 @@ import { showMessage } from '../../Helpers/toast'
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState({ email: '' })
   const dispatch = useAppDispatch()
+  const error = useAppSelector(state => state.password.error)
   const history = useHistory()
+
+  useEffect(() => {
+    if (error) {
+      showMessage('error', error)
+    }
+  }, [error])
 
   const schema = yup.object().shape({
     email: yup
@@ -39,19 +46,14 @@ const ForgotPassword: React.FC = () => {
       .then(() => {
         const data = {
           email: email.email,
-          redirect_url:
-            'http://localhost:3000/authentication/reset-password/'
+          redirect_url: 'http://localhost:3000/authentication/reset-password/'
         }
         dispatch(forgotPassword(data))
           .then(res => {
+            console.log(res)
             if (res.payload === undefined) {
-              return showMessage(
-                'error',
-                'Check the email provided and try again',
-                2000
-              )
+              return
             }
-
             showMessage('success', 'Success, check your inbox', 2000)
             setTimeout(() => {
               history.push('/authentication/login')

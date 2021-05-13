@@ -5,18 +5,21 @@ import { IoMdArrowForward } from 'react-icons/io'
 import * as yup from 'yup'
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-// import { AUTH_USER } from '../../store/userReducer'
 import Form from '../../Components/Form/'
 import { AuthenticationFormContainer } from '../../Components/Form/Form'
 import Input from '../../Components/Input'
 import { TitleSM, OutlineButton } from '../../Components'
 import { getCookie, showMessage } from '../../Helpers'
 import { ForgetPasswordParagraph } from './SignIn'
-import { setAuth } from '../../store/sessionReducer'
+import { CLEAR_SESSION, setAuth } from '../../store/sessionReducer'
+
+interface ILogin {
+  email: string
+  password: string
+}
 
 const Login: React.FC = () => {
-  const [user, setUser] = useState({ email: '', password: '' })
-  // const currentUser = useAppSelector(state => state.user)
+  const [login, setLogin] = useState({ email: '', password: '' })
   const session = useAppSelector(state => state.session)
   const token = getCookie('@AUTH_TOKEN')
   const history = useHistory()
@@ -24,7 +27,10 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (token) history.push('/')
-    if (session.error) showMessage('error', session.error)
+    if (session.error) {
+      showMessage('error', session.error)
+      dispatch(CLEAR_SESSION())
+    }
   }, [session])
 
   const schema = yup.object().shape({
@@ -40,14 +46,16 @@ const Login: React.FC = () => {
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
     const target = event.target as HTMLInputElement
-    setUser({ ...user, [target.name]: target.value })
+    setLogin({ ...login, [target.name]: target.value })
   }
 
-  const handleClick = (event: React.FormEvent<HTMLButtonElement>): void => {
+  const handleClick = async (
+    event: React.FormEvent<HTMLButtonElement>
+  ): Promise<void> => {
     event.preventDefault()
     schema
-      .validate(user)
-      .then((res: any) => {
+      .validate(login)
+      .then((res: ILogin) => {
         dispatch(setAuth(res))
       })
       .catch(err => showMessage('error', err.errors[0]))
@@ -63,14 +71,14 @@ const Login: React.FC = () => {
             type='email'
             name='email'
             placeholder='Email'
-            value={user.email}
+            value={login.email}
           />
           <Input
             changed={handleChange}
             name='password'
             type='password'
             placeholder='Password'
-            value={user.password}
+            value={login.password}
           />
           <ForgetPasswordParagraph>
             <Link to='/authentication/forgot-password'>
